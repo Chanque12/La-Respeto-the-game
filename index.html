@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>La Respeto — ¿Más o Menos?</title>
+<title>La Respeto — App Oficial</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Teko:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -17,7 +17,7 @@
     --cream: #f4f0e6;
     --cream-dim: rgba(244,240,230,0.62);
     --danger: #d1554b;
-    --danger-deep: #a63b32;
+    --pitch: #2e8b57;
     --radius: 6px;
   }
   *{box-sizing:border-box;}
@@ -26,324 +26,136 @@
     margin:0;
     min-height:100vh;
     background-color: var(--bg);
-    background-image:
-      repeating-linear-gradient(115deg, rgba(255,255,255,0.025) 0 40px, transparent 40px 80px);
+    background-image: repeating-linear-gradient(115deg, rgba(255,255,255,0.025) 0 40px, transparent 40px 80px);
     color: var(--cream);
     font-family: 'Archivo', sans-serif;
     display:flex;
     justify-content:center;
-    padding: 28px 14px 40px;
+    padding: 20px 14px 40px;
   }
-  #app{
-    width:100%;
-    max-width: 480px;
-  }
+  #app{ width:100%; max-width: 480px; }
 
-  /* ---- Scoreboard header ---- */
+  /* ---- Header ---- */
   .scoreboard-bar{
-    display:flex;
-    align-items:center;
-    gap:12px;
-    padding-bottom:18px;
-    border-bottom: 1px solid var(--line);
-    margin-bottom: 22px;
+    display:flex; align-items:center; gap:12px;
+    padding-bottom:18px; border-bottom: 1px solid var(--line); margin-bottom: 22px;
   }
   .crest{
     width:44px; height:44px; flex:none;
-    border-radius:50%;
-    border:2px solid var(--gold);
-    outline: 1px solid rgba(232,178,61,0.35);
-    outline-offset: 3px;
+    border-radius:50%; border:2px solid var(--gold);
+    outline: 1px solid rgba(232,178,61,0.35); outline-offset: 3px;
     display:flex; align-items:center; justify-content:center;
-    font-family:'Teko', sans-serif;
-    font-size:20px; font-weight:600;
-    color: var(--gold);
-    background: radial-gradient(circle at 35% 30%, #1e4230, #0f2318);
+    font-family:'Teko', sans-serif; font-size:20px; font-weight:600;
+    color: var(--gold); background: radial-gradient(circle at 35% 30%, #1e4230, #0f2318);
   }
   .club-heading{ flex:1; min-width:0; }
-  .club-name{
-    font-family:'Teko', sans-serif;
-    font-size: 30px;
-    letter-spacing: 0.5px;
-    line-height:1;
-    font-weight:600;
-    text-transform: uppercase;
-  }
-  .club-sub{
-    font-size:12px;
-    color: var(--cream-dim);
-    margin-top:2px;
-  }
-  .score-pill{
-    flex:none;
-    text-align:right;
-    font-family:'Teko', sans-serif;
-    font-size:16px;
-    color: var(--cream-dim);
-    line-height:1.25;
-  }
-  .score-pill b{
-    color: var(--gold);
-    font-size:20px;
-    font-weight:600;
-  }
+  .club-name{ font-family:'Teko', sans-serif; font-size: 30px; line-height:1; font-weight:600; text-transform: uppercase; }
+  .club-sub{ font-size:12px; color: var(--cream-dim); margin-top:2px; }
+  .score-pill{ flex:none; text-align:right; font-family:'Teko', sans-serif; font-size:16px; color: var(--cream-dim); line-height:1.25; }
+  .score-pill b{ color: var(--gold); font-size:20px; font-weight:600; }
 
   main{ display:none; }
   main.active{ display:block; }
 
-  /* ---- Setup screen ---- */
-  .main-logo {
-    width: 100%;
-    max-width: 220px;
-    margin: 0 auto 24px auto;
-    display: block;
-    border-radius: var(--radius);
-    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-    border: 2px solid var(--gold);
-  }
-  
-  .setup-container {
-    text-align: center;
-  }
+  /* ---- Buttons & Typography ---- */
+  h1.section-title{ font-family:'Teko', sans-serif; font-size: 26px; font-weight:600; text-transform: uppercase; margin: 0 0 4px; }
+  p.section-hint{ color: var(--cream-dim); font-size:14px; margin: 0 0 20px; line-height:1.5; }
 
-  h1.section-title{
-    font-family:'Teko', sans-serif;
-    font-size: 26px;
-    font-weight:600;
-    text-transform: uppercase;
-    letter-spacing:0.3px;
-    margin: 0 0 4px;
+  .primary-btn, .secondary-btn{
+    width:100%; border-radius: var(--radius); font-family:'Teko', sans-serif;
+    font-weight:600; text-transform: uppercase; cursor:pointer; letter-spacing:0.5px;
   }
-  p.section-hint{
-    color: var(--cream-dim);
-    font-size:14px;
-    margin: 0 0 20px;
-    line-height:1.5;
-  }
-
-  .stat-toggle{
-    display:grid;
-    grid-template-columns: 1fr 1fr;
-    gap:10px;
-    margin-bottom:24px;
-  }
-  .stat-toggle button{
-    padding:12px 4px;
-    background: var(--panel);
-    border: 1px solid var(--line);
-    border-radius: var(--radius);
-    color: var(--cream-dim);
-    font-family:'Archivo',sans-serif;
-    font-weight:600;
-    font-size:14px;
-    letter-spacing:0.2px;
-    cursor:pointer;
-    transition: all 0.2s;
-  }
-  .stat-toggle button:hover {
-    border-color: rgba(232,178,61,0.5);
-  }
-  .stat-toggle button.selected{
-    background: var(--gold);
-    border-color: var(--gold);
-    color: #241a05;
-  }
-  .stat-toggle button.danger-selected{
-    background: var(--danger);
-    border-color: var(--danger);
-    color: white;
-  }
-  .stat-toggle button.success-selected{
-    background: #4caf50;
-    border-color: #4caf50;
-    color: white;
-  }
-
-  .primary-btn{
-    width:100%;
-    padding: 15px;
-    background: var(--gold);
-    border: none;
-    border-radius: var(--radius);
-    color: #241a05;
-    font-family:'Teko', sans-serif;
-    font-size:22px;
-    font-weight:600;
-    text-transform: uppercase;
-    letter-spacing:0.5px;
-    cursor:pointer;
-  }
-  .primary-btn:disabled{
-    background: var(--panel-alt);
-    color: var(--cream-dim);
-    cursor:not-allowed;
-  }
-  .secondary-btn{
-    width:100%;
-    padding: 13px;
-    background: transparent;
-    border: 1px solid var(--line);
-    border-radius: var(--radius);
-    color: var(--cream);
-    font-family:'Teko', sans-serif;
-    font-size:18px;
-    font-weight:600;
-    text-transform: uppercase;
-    letter-spacing:0.5px;
-    cursor:pointer;
-    margin-top:10px;
-  }
+  .primary-btn{ padding: 15px; background: var(--gold); border: none; color: #241a05; font-size:22px; }
+  .secondary-btn{ padding: 13px; background: transparent; border: 1px solid var(--line); color: var(--cream); font-size:18px; margin-top:10px; }
   .secondary-btn:hover{ border-color: var(--gold); color: var(--gold); }
 
-  /* ---- Game screen ---- */
-  .duel-card{
-    border: 1px solid var(--line);
-    border-radius: var(--radius);
-    overflow:hidden;
-    background: var(--panel);
-    margin-bottom: 18px;
-  }
-  .duel-panels{
-    display:flex;
-    position:relative;
-  }
-  .duel-panel{
-    flex:1;
-    padding: 24px 8px 20px;
-    text-align:center;
-    transition: background-color 0.35s ease, box-shadow 0.35s ease;
-  }
-  .duel-panel.left{ border-right: 1px solid var(--line); }
-  
-  /* NUEVO: ESTILOS DE LA FOTO DEL JUGADOR */
-  .player-photo {
-    width: 90px;
-    height: 90px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 2px solid var(--gold);
-    margin: 0 auto 12px auto;
-    display: block;
-    background-color: var(--bg);
-  }
+  /* ---- Main Menu ---- */
+  .main-logo { width: 100%; max-width: 200px; margin: 0 auto 24px auto; display: block; border-radius: var(--radius); border: 2px solid var(--gold); }
+  .menu-options { display:flex; flex-direction:column; gap:14px; margin-top: 30px; }
 
-  .vs-badge{
-    position:absolute;
-    top:50%; left:50%;
-    transform: translate(-50%,-50%);
-    width:38px; height:38px;
-    border-radius:50%;
-    background: var(--bg);
-    border: 2px solid var(--gold);
-    color: var(--gold);
-    font-family:'Teko',sans-serif;
-    font-size:14px;
-    font-weight:600;
-    display:flex; align-items:center; justify-content:center;
-    z-index:2;
+  /* ---- Setup screen (Game) ---- */
+  .stat-toggle{ display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:24px; }
+  .stat-toggle button{
+    padding:12px 4px; background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius);
+    color: var(--cream-dim); font-family:'Archivo',sans-serif; font-weight:600; font-size:14px; cursor:pointer;
   }
-  .player-name{
-    font-family:'Teko', sans-serif;
-    font-size: 20px;
-    font-weight:600;
-    text-transform:uppercase;
-    letter-spacing:0.3px;
-    margin-bottom: 6px;
-    word-break: break-word;
-    line-height: 1.1;
-  }
-  .player-value{
-    font-family:'Teko', sans-serif;
-    font-size: 54px;
-    font-weight:600;
-    line-height:1;
-    color: var(--gold);
-  }
-  .player-value.hidden-value{
-    color: var(--cream-dim);
-    font-size: 44px;
-  }
-  .player-stat-label{
-    margin-top:2px;
-    font-size:11px;
-    text-transform:uppercase;
-    letter-spacing:0.7px;
-    color: var(--cream-dim);
-  }
+  .stat-toggle button.selected{ background: var(--gold); border-color: var(--gold); color: #241a05; }
+  .stat-toggle button.danger-selected{ background: var(--danger); border-color: var(--danger); color: white; }
+  .stat-toggle button.success-selected{ background: #4caf50; border-color: #4caf50; color: white; }
+
+  /* ---- Game screen ---- */
+  .duel-card{ border: 1px solid var(--line); border-radius: var(--radius); overflow:hidden; background: var(--panel); margin-bottom: 18px; }
+  .duel-panels{ display:flex; position:relative; }
+  .duel-panel{ flex:1; padding: 24px 8px 20px; text-align:center; transition: background-color 0.35s ease; }
+  .duel-panel.left{ border-right: 1px solid var(--line); }
+  .player-photo { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 2px solid var(--gold); margin: 0 auto 12px auto; display: block; background-color: var(--bg); }
+  .vs-badge{ position:absolute; top:50%; left:50%; transform: translate(-50%,-50%); width:38px; height:38px; border-radius:50%; background: var(--bg); border: 2px solid var(--gold); color: var(--gold); font-family:'Teko',sans-serif; font-size:14px; font-weight:600; display:flex; align-items:center; justify-content:center; z-index:2; }
+  .player-name{ font-family:'Teko', sans-serif; font-size: 20px; font-weight:600; text-transform:uppercase; margin-bottom: 6px; line-height: 1.1; word-break: break-word;}
+  .player-value{ font-family:'Teko', sans-serif; font-size: 54px; font-weight:600; line-height:1; color: var(--gold); }
+  .player-value.hidden-value{ color: var(--cream-dim); font-size: 44px; }
+  .player-stat-label{ margin-top:2px; font-size:11px; text-transform:uppercase; color: var(--cream-dim); }
   .duel-panel.flash-correct{ background: rgba(232,178,61,0.16); box-shadow: inset 0 0 0 1px var(--gold); }
   .duel-panel.flash-wrong{ background: rgba(209,85,75,0.16); box-shadow: inset 0 0 0 1px var(--danger); }
+  .prompt-text{ text-align:center; font-size:15px; color: var(--cream-dim); margin: 0 0 14px; line-height:1.5; }
+  .guess-buttons{ display:flex; gap:10px; }
+  .guess-btn{ flex:1; padding: 16px 8px; background: var(--panel-alt); border: 1px solid var(--line); border-radius: var(--radius); color: var(--cream); font-family:'Teko', sans-serif; font-size: 19px; font-weight:600; text-transform:uppercase; cursor:pointer; }
+  .guess-btn:disabled{ opacity:0.55; pointer-events:none; }
 
-  .prompt-text{
-    text-align:center;
-    font-size:15px;
-    color: var(--cream-dim);
-    margin: 0 0 14px;
-    line-height:1.5;
+  /* ---- Builder Screen ---- */
+  .format-selector { display:flex; gap:8px; margin-bottom: 16px; }
+  .format-selector button { flex:1; padding: 10px 0; background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); color: var(--cream-dim); font-family:'Teko',sans-serif; font-size:18px; font-weight:600; cursor:pointer;}
+  .format-selector button.active { background: var(--gold); color: #241a05; border-color: var(--gold); }
+  
+  .pitch-container {
+    width: 100%; height: 500px; background: var(--pitch); border: 2px solid #fff;
+    position: relative; overflow: hidden; border-radius: 4px; touch-action: none; /* Prevents scroll while dragging */
+    box-shadow: inset 0 0 40px rgba(0,0,0,0.3); margin-bottom: 16px;
   }
-  .prompt-text b{ color: var(--cream); }
+  /* Pitch markings */
+  .pitch-container::before { content: ''; position: absolute; top: 50%; left: 0; right: 0; height: 2px; background: rgba(255,255,255,0.6); transform: translateY(-50%); }
+  .pitch-container::after { content: ''; position: absolute; top: 50%; left: 50%; width: 70px; height: 70px; border: 2px solid rgba(255,255,255,0.6); border-radius: 50%; transform: translate(-50%, -50%); }
+  .penalty-area-top { position: absolute; top: 0; left: 25%; width: 50%; height: 15%; border: 2px solid rgba(255,255,255,0.6); border-top: none; }
+  .penalty-area-bottom { position: absolute; bottom: 0; left: 25%; width: 50%; height: 15%; border: 2px solid rgba(255,255,255,0.6); border-bottom: none; }
+  
+  /* Player Tokens on Pitch */
+  .pitch-token {
+    position: absolute; transform: translate(-50%, -50%);
+    display: flex; flex-direction: column; align-items: center;
+    width: 64px; cursor: pointer; z-index: 10;
+  }
+  .pitch-token img {
+    width: 38px; height: 38px; border-radius: 50%; border: 2px solid #fff;
+    background: var(--bg); pointer-events: none; object-fit: cover;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.5);
+  }
+  .pitch-token .token-name {
+    background: rgba(0,0,0,0.75); color: #fff; font-size: 11px;
+    padding: 2px 6px; border-radius: 12px; margin-top: -6px;
+    text-align: center; white-space: nowrap; pointer-events: none; z-index: 2;
+    border: 1px solid rgba(255,255,255,0.2);
+  }
 
-  .guess-buttons{
-    display:flex;
-    gap:10px;
+  /* ---- Modal Picker ---- */
+  .modal-overlay {
+    position: fixed; top:0; left:0; right:0; bottom:0;
+    background: rgba(0,0,0,0.85); z-index: 999;
+    display: flex; flex-direction: column;
+    opacity: 0; pointer-events: none; transition: opacity 0.2s;
   }
-  .guess-btn{
-    flex:1;
-    padding: 16px 8px;
-    background: var(--panel-alt);
-    border: 1px solid var(--line);
-    border-radius: var(--radius);
-    color: var(--cream);
-    font-family:'Teko', sans-serif;
-    font-size: 19px;
-    font-weight:600;
-    text-transform:uppercase;
-    letter-spacing:0.4px;
-    cursor:pointer;
-  }
-  .guess-btn:hover:not(:disabled){ border-color: var(--gold); color: var(--gold); }
-  .guess-btn:disabled{ cursor: default; opacity:0.55; }
+  .modal-overlay.active { opacity: 1; pointer-events: auto; }
+  .modal-header { padding: 16px; background: var(--panel); border-bottom: 1px solid var(--line); display:flex; justify-content: space-between; align-items:center; }
+  .modal-header h2 { font-family:'Teko',sans-serif; margin:0; font-size:22px; text-transform:uppercase;}
+  .close-modal { background:none; border:none; color:var(--gold); font-size:24px; cursor:pointer;}
+  .modal-body { flex:1; overflow-y:auto; padding: 16px; display:grid; grid-template-columns: repeat(auto-fill, minmax(70px, 1fr)); gap:12px; align-content: start; }
+  .roster-card { text-align:center; cursor:pointer; }
+  .roster-card img { width:54px; height:54px; border-radius:50%; object-fit:cover; border:2px solid var(--line); margin-bottom:4px; }
+  .roster-card:hover img { border-color: var(--gold); }
+  .roster-card .name { font-size:11px; font-weight:600; color:var(--cream); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
   /* ---- Game over screen ---- */
-  .over-box{
-    text-align:center;
-    border: 1px solid var(--line);
-    border-radius: var(--radius);
-    background: var(--panel);
-    padding: 34px 20px;
-    margin-bottom: 16px;
-  }
-  .over-box .flag{
-    font-family:'Teko', sans-serif;
-    font-size:16px;
-    color: var(--danger);
-    text-transform:uppercase;
-    letter-spacing:0.6px;
-    margin-bottom: 8px;
-  }
-  .over-box .final-score{
-    font-family:'Teko', sans-serif;
-    font-size: 74px;
-    line-height:1;
-    color: var(--gold);
-    font-weight:600;
-  }
-  .over-box .final-label{
-    font-size:13px;
-    color: var(--cream-dim);
-    margin-top:6px;
-  }
-  .over-box .best-line{
-    margin-top:16px;
-    font-size:13px;
-    color: var(--cream-dim);
-  }
-  .over-box .best-line b{ color: var(--cream); }
-
-  @media (max-width:360px){
-    .player-value{ font-size:42px; }
-    .club-name{ font-size:26px; }
-    .player-photo { width: 70px; height: 70px; }
-  }
+  .over-box{ text-align:center; border: 1px solid var(--line); border-radius: var(--radius); background: var(--panel); padding: 34px 20px; margin-bottom: 16px; }
+  .over-box .final-score{ font-family:'Teko', sans-serif; font-size: 74px; line-height:1; color: var(--gold); font-weight:600; }
+  .over-box .final-label{ font-size:13px; color: var(--cream-dim); margin-top:6px; }
 </style>
 </head>
 <body>
@@ -353,15 +165,27 @@
     <div class="crest">LR</div>
     <div class="club-heading">
       <div class="club-name">La Respeto</div>
-      <div class="club-sub">¿Más o Menos?</div>
+      <div class="club-sub" id="headerSubtitle">App Oficial</div>
     </div>
     <div class="score-pill" id="scorePill" hidden></div>
   </div>
 
-  <!-- SETUP SCREEN -->
-  <main id="screen-setup" class="active">
-    <div class="setup-container">
+  <!-- MAIN MENU SCREEN -->
+  <main id="screen-menu" class="active">
+    <div style="text-align: center;">
       <img src="image_1ccf02.jpg" alt="Escudo La Respeto" class="main-logo">
+      <h1 class="section-title">Bienvenido</h1>
+      
+      <div class="menu-options">
+        <button type="button" class="primary-btn" onclick="app.showScreen('setup')">Jugar: ¿Más o Menos?</button>
+        <button type="button" class="secondary-btn" style="border-color: var(--gold); color: var(--gold);" onclick="app.initBuilder()">Pizarrón Táctico</button>
+      </div>
+    </div>
+  </main>
+
+  <!-- SETUP SCREEN (Game) -->
+  <main id="screen-setup">
+    <div style="text-align: center;">
       <h1 class="section-title">Elegí la categoría</h1>
       <p class="section-hint">Seleccioná qué estadística querés comparar.</p>
 
@@ -374,7 +198,8 @@
         <button type="button" id="statLosses">Derrotas</button>
       </div>
 
-      <button type="button" class="primary-btn" id="startBtn">Jugar</button>
+      <button type="button" class="primary-btn" id="startBtn">Empezar a Jugar</button>
+      <button type="button" class="secondary-btn" onclick="app.showScreen('menu')">Volver al Menú</button>
     </div>
   </main>
 
@@ -382,30 +207,22 @@
   <main id="screen-game">
     <div class="duel-card">
       <div class="duel-panels">
-        
-        <!-- PANEL IZQUIERDO CON FOTO -->
         <div class="duel-panel left" id="leftPanel">
-          <img class="player-photo" id="leftPhoto" src="" alt="Foto Jugador">
+          <img class="player-photo" id="leftPhoto" src="" alt="Foto">
           <div class="player-name" id="leftName">—</div>
           <div class="player-value" id="leftValue">0</div>
           <div class="player-stat-label" id="leftStatLabel">GOLES</div>
         </div>
-        
         <div class="vs-badge">VS</div>
-        
-        <!-- PANEL DERECHO CON FOTO -->
         <div class="duel-panel right" id="rightPanel">
-          <img class="player-photo" id="rightPhoto" src="" alt="Foto Jugador">
+          <img class="player-photo" id="rightPhoto" src="" alt="Foto">
           <div class="player-name" id="rightName">—</div>
           <div class="player-value hidden-value" id="rightValue">?</div>
           <div class="player-stat-label" id="rightStatLabel">GOLES</div>
         </div>
-
       </div>
     </div>
-
     <p class="prompt-text" id="promptText"></p>
-
     <div class="guess-buttons">
       <button type="button" class="guess-btn" id="btnMore">Más ▲</button>
       <button type="button" class="guess-btn" id="btnLess">Menos ▼</button>
@@ -415,21 +232,51 @@
   <!-- GAME OVER SCREEN -->
   <main id="screen-over">
     <div class="over-box">
-      <div class="flag">Fin del juego</div>
+      <div style="color:var(--danger); font-family:'Teko', sans-serif; font-size:20px; text-transform:uppercase;">Fin del juego</div>
       <div class="final-score" id="finalScore">0</div>
       <div class="final-label">comparaciones acertadas</div>
-      <div class="best-line">Récord de la sesión: <b id="bestScoreLine">0</b></div>
     </div>
     <button type="button" class="primary-btn" id="playAgainBtn">Jugar de nuevo</button>
-    <button type="button" class="secondary-btn" id="changeCategoryBtn">Cambiar categoría</button>
+    <button type="button" class="secondary-btn" onclick="app.showScreen('menu')">Volver al Menú</button>
   </main>
+
+  <!-- BUILDER SCREEN (Lineup) -->
+  <main id="screen-builder">
+    <div class="format-selector" id="formatSelector">
+      <button type="button" data-format="5" class="active">Fútbol 5</button>
+      <button type="button" data-format="7">Fútbol 7</button>
+      <button type="button" data-format="9">Fútbol 9</button>
+      <button type="button" data-format="11">Fútbol 11</button>
+    </div>
+    
+    <div class="pitch-container" id="pitch">
+      <div class="penalty-area-top"></div>
+      <div class="penalty-area-bottom"></div>
+      <!-- Tokens render here -->
+    </div>
+    
+    <p style="text-align:center; font-size:12px; color:var(--cream-dim); margin-top:-6px; margin-bottom: 16px;">
+      <b>Toque rápido</b>: Cambiar jugador &nbsp;|&nbsp; <b>Mantener y mover</b>: Cambiar posición
+    </p>
+
+    <button type="button" class="secondary-btn" onclick="app.showScreen('menu')">Volver al Menú</button>
+  </main>
+
+  <!-- PLAYER PICKER MODAL -->
+  <div class="modal-overlay" id="playerModal">
+    <div class="modal-header">
+      <h2>Elegir Jugador</h2>
+      <button class="close-modal" onclick="app.closeModal()">✕</button>
+    </div>
+    <div class="modal-body" id="modalRoster"></div>
+  </div>
 
 </div>
 
 <script>
-(function(){
-  // ---------- Roster (La Respeto Data + Historial + FOTOS) ----------
-  // Fijate que agregué "photo". Si subís las fotos con esos nombres a GitHub, van a aparecer solas.
+const app = (function(){
+  
+  // ---------- Roster Data ----------
   const playersData = [
     { id: 'p1', name: 'Prepu', photo: 'prepu.jpg', goals: 76, goals2026: 32, assists: 20, assists2026: 8, wins: 6, losses: 23 },
     { id: 'p2', name: 'Fran', photo: 'fran.jpg', goals: 46, goals2026: 19, assists: 14, assists2026: 4, wins: 18, losses: 8 },
@@ -465,205 +312,265 @@
     { id: 'p32', name: 'Jorgito', photo: 'jorgito.jpg', goals: 0, goals2026: 0, assists: 0, assists2026: 0, wins: 1, losses: 0 }
   ];
 
-  // ---------- State ----------
-  let statKey = 'goals'; 
-  let pool = [];          
-  let usedIds = new Set();
-  let leftPlayer = null, rightPlayer = null;
-  let score = 0;
-  let best = 0;
-  let roundLocked = false;
-
-  // ---------- Elements ----------
-  const startBtn = document.getElementById('startBtn');
-  
-  const statGoalsBtn = document.getElementById('statGoals');
-  const statGoals2026Btn = document.getElementById('statGoals2026');
-  const statAssistsBtn = document.getElementById('statAssists');
-  const statAssists2026Btn = document.getElementById('statAssists2026');
-  const statWinsBtn = document.getElementById('statWins');
-  const statLossesBtn = document.getElementById('statLosses');
-
-  const screenSetup = document.getElementById('screen-setup');
-  const screenGame = document.getElementById('screen-game');
-  const screenOver = document.getElementById('screen-over');
-  const scorePill = document.getElementById('scorePill');
-
-  const leftPanel = document.getElementById('leftPanel');
-  const rightPanel = document.getElementById('rightPanel');
-  
-  const leftPhoto = document.getElementById('leftPhoto');
-  const rightPhoto = document.getElementById('rightPhoto');
-  
-  const leftName = document.getElementById('leftName');
-  const rightName = document.getElementById('rightName');
-  const leftValue = document.getElementById('leftValue');
-  const rightValue = document.getElementById('rightValue');
-  const leftStatLabel = document.getElementById('leftStatLabel');
-  const rightStatLabel = document.getElementById('rightStatLabel');
-  const promptText = document.getElementById('promptText');
-  const btnMore = document.getElementById('btnMore');
-  const btnLess = document.getElementById('btnLess');
-
-  const finalScore = document.getElementById('finalScore');
-  const bestScoreLine = document.getElementById('bestScoreLine');
-  const playAgainBtn = document.getElementById('playAgainBtn');
-  const changeCategoryBtn = document.getElementById('changeCategoryBtn');
-
-  // ---------- Setup ----------
-  statGoalsBtn.addEventListener('click', () => setStat('goals'));
-  statGoals2026Btn.addEventListener('click', () => setStat('goals2026'));
-  statAssistsBtn.addEventListener('click', () => setStat('assists'));
-  statAssists2026Btn.addEventListener('click', () => setStat('assists2026'));
-  statWinsBtn.addEventListener('click', () => setStat('wins'));
-  statLossesBtn.addEventListener('click', () => setStat('losses'));
-
-  function setStat(key){
-    statKey = key;
-    statGoalsBtn.classList.toggle('selected', key === 'goals');
-    statGoals2026Btn.classList.toggle('selected', key === 'goals2026');
-    statAssistsBtn.classList.toggle('selected', key === 'assists');
-    statAssists2026Btn.classList.toggle('selected', key === 'assists2026');
-    statWinsBtn.classList.toggle('success-selected', key === 'wins');
-    statLossesBtn.classList.toggle('danger-selected', key === 'losses');
+  // ---------- Navigation ----------
+  const screens = ['menu', 'setup', 'game', 'over', 'builder'];
+  function showScreen(name){
+    screens.forEach(s => {
+      document.getElementById('screen-'+s).classList.toggle('active', s === name);
+    });
+    document.getElementById('scorePill').hidden = (name !== 'game');
+    const subtitle = document.getElementById('headerSubtitle');
+    if(name === 'menu' || name === 'builder') subtitle.textContent = 'App Oficial';
+    else subtitle.textContent = '¿Más o Menos?';
   }
 
-  function statLabel(){
-    if(statKey === 'goals') return 'GOLES HIST.';
-    if(statKey === 'goals2026') return 'GOLES 2026';
-    if(statKey === 'assists') return 'ASIST. HIST.';
-    if(statKey === 'assists2026') return 'ASIST. 2026';
-    if(statKey === 'wins') return 'VICTORIAS';
-    if(statKey === 'losses') return 'DERROTAS';
-  }
-  function statLabelLower(){
-    if(statKey === 'goals') return 'goles históricos';
-    if(statKey === 'goals2026') return 'goles en 2026';
-    if(statKey === 'assists') return 'asistencias históricas';
-    if(statKey === 'assists2026') return 'asistencias en 2026';
-    if(statKey === 'wins') return 'victorias';
-    if(statKey === 'losses') return 'derrotas';
-  }
+  // ==========================================
+  // MODULE 1: HIGHER OR LOWER GAME
+  // ==========================================
+  let statKey = 'goals', pool = [], usedIds = new Set(), leftPlayer = null, rightPlayer = null, score = 0, roundLocked = false;
+  
+  const setupBtns = {
+    goals: document.getElementById('statGoals'), goals2026: document.getElementById('statGoals2026'),
+    assists: document.getElementById('statAssists'), assists2026: document.getElementById('statAssists2026'),
+    wins: document.getElementById('statWins'), losses: document.getElementById('statLosses')
+  };
 
-  // ---------- Start Game Logic ----------
-  startBtn.addEventListener('click', () => {
-    // Filtramos solo los jugadores que tengan un valor mayor a 0 en la estadística elegida
-    pool = playersData.filter(p => p[statKey] > 0);
-
-    if(pool.length < 2){
-      alert('No hay suficientes jugadores con estadísticas para jugar en esta categoría.');
-      return;
-    }
-    startGame();
+  Object.keys(setupBtns).forEach(k => {
+    setupBtns[k].addEventListener('click', () => {
+      statKey = k;
+      Object.values(setupBtns).forEach(b => b.className = '');
+      if(k === 'wins') setupBtns[k].className = 'success-selected';
+      else if(k === 'losses') setupBtns[k].className = 'danger-selected';
+      else setupBtns[k].className = 'selected';
+    });
   });
 
-  function pickRandomFrom(list){
-    return list[Math.floor(Math.random() * list.length)];
+  function getStatLabel(){
+    const dict = { goals: 'GOLES HIST.', goals2026: 'GOLES 2026', assists: 'ASIST. HIST.', assists2026: 'ASIST. 2026', wins: 'VICTORIAS', losses: 'DERROTAS' };
+    return dict[statKey];
   }
 
-  function pickNextRight(excludeId){
-    let candidates = pool.filter(p => p.id !== excludeId && !usedIds.has(p.id));
-    if(candidates.length === 0){
-      usedIds = new Set([excludeId]);
-      candidates = pool.filter(p => p.id !== excludeId);
-    }
-    return pickRandomFrom(candidates);
-  }
-
-  function startGame(){
-    score = 0;
-    usedIds = new Set();
-
-    const first = pickRandomFrom(pool);
-    usedIds.add(first.id);
-    leftPlayer = first;
-    rightPlayer = pickNextRight(first.id);
+  document.getElementById('startBtn').addEventListener('click', () => {
+    pool = playersData.filter(p => p[statKey] > 0);
+    if(pool.length < 2) return alert('No hay suficientes jugadores con estadísticas en esta categoría.');
+    score = 0; usedIds = new Set();
+    leftPlayer = pool[Math.floor(Math.random() * pool.length)];
+    usedIds.add(leftPlayer.id);
+    rightPlayer = pickRightPlayer(leftPlayer.id);
     usedIds.add(rightPlayer.id);
+    showScreen('game'); renderRound();
+  });
 
-    showScreen('game');
-    renderRound();
+  function pickRightPlayer(exId){
+    let cands = pool.filter(p => p.id !== exId && !usedIds.has(p.id));
+    if(!cands.length) { usedIds = new Set([exId]); cands = pool.filter(p => p.id !== exId); }
+    return cands[Math.floor(Math.random() * cands.length)];
   }
 
   function renderRound(){
     roundLocked = false;
-    leftPanel.classList.remove('flash-correct', 'flash-wrong');
-    rightPanel.classList.remove('flash-correct', 'flash-wrong');
+    document.getElementById('leftPanel').className = 'duel-panel left';
+    document.getElementById('rightPanel').className = 'duel-panel right';
 
-    // Manejo de la foto con truco: si la imagen no carga, ponemos el escudo por defecto
-    leftPhoto.src = leftPlayer.photo;
-    leftPhoto.onerror = () => { leftPhoto.src = 'image_1ccf02.jpg'; };
-    leftName.textContent = leftPlayer.name;
-    leftValue.textContent = leftPlayer[statKey];
-    leftValue.classList.remove('hidden-value');
-    leftStatLabel.textContent = statLabel();
+    const lp = document.getElementById('leftPhoto');
+    lp.src = leftPlayer.photo; lp.onerror = () => lp.src = 'image_1ccf02.jpg';
+    document.getElementById('leftName').textContent = leftPlayer.name;
+    document.getElementById('leftValue').textContent = leftPlayer[statKey];
+    document.getElementById('leftValue').className = 'player-value';
+    document.getElementById('leftStatLabel').textContent = getStatLabel();
 
-    rightPhoto.src = rightPlayer.photo;
-    rightPhoto.onerror = () => { rightPhoto.src = 'image_1ccf02.jpg'; };
-    rightName.textContent = rightPlayer.name;
-    rightValue.textContent = '?';
-    rightValue.classList.add('hidden-value');
-    rightStatLabel.textContent = statLabel();
+    const rp = document.getElementById('rightPhoto');
+    rp.src = rightPlayer.photo; rp.onerror = () => rp.src = 'image_1ccf02.jpg';
+    document.getElementById('rightName').textContent = rightPlayer.name;
+    document.getElementById('rightValue').textContent = '?';
+    document.getElementById('rightValue').className = 'player-value hidden-value';
+    document.getElementById('rightStatLabel').textContent = getStatLabel();
 
-    promptText.innerHTML = `¿<b>${rightPlayer.name}</b> tiene más o menos ${statLabelLower()} que <b>${leftPlayer.name}</b>?`;
-
-    btnMore.disabled = false;
-    btnLess.disabled = false;
-
-    updateScorePill();
+    document.getElementById('promptText').innerHTML = `¿<b>${rightPlayer.name}</b> tiene más o menos ${getStatLabel().toLowerCase()} que <b>${leftPlayer.name}</b>?`;
+    document.getElementById('btnMore').disabled = false;
+    document.getElementById('btnLess').disabled = false;
+    document.getElementById('scorePill').innerHTML = `Racha<br><b>${score}</b>`;
   }
 
-  function updateScorePill(){
-    scorePill.hidden = false;
-    scorePill.innerHTML = `Racha<br><b>${score}</b>`;
-  }
-
-  btnMore.addEventListener('click', () => handleGuess('more'));
-  btnLess.addEventListener('click', () => handleGuess('less'));
+  document.getElementById('btnMore').addEventListener('click', () => handleGuess('more'));
+  document.getElementById('btnLess').addEventListener('click', () => handleGuess('less'));
 
   function handleGuess(choice){
-    if(roundLocked) return;
-    roundLocked = true;
-    btnMore.disabled = true;
-    btnLess.disabled = true;
+    if(roundLocked) return; roundLocked = true;
+    document.getElementById('btnMore').disabled = true;
+    document.getElementById('btnLess').disabled = true;
 
-    const lv = leftPlayer[statKey];
-    const rv = rightPlayer[statKey];
-    let correct;
-    if(rv === lv) correct = true;
-    else correct = choice === 'more' ? rv > lv : rv < lv;
+    const lv = leftPlayer[statKey], rv = rightPlayer[statKey];
+    const correct = (rv === lv) || (choice === 'more' ? rv > lv : rv < lv);
 
-    rightValue.textContent = rv;
-    rightValue.classList.remove('hidden-value');
-    rightPanel.classList.add(correct ? 'flash-correct' : 'flash-wrong');
-    leftPanel.classList.add(correct ? 'flash-correct' : 'flash-wrong');
+    const rvEl = document.getElementById('rightValue');
+    rvEl.textContent = rv; rvEl.className = 'player-value';
+    document.getElementById('leftPanel').classList.add(correct ? 'flash-correct' : 'flash-wrong');
+    document.getElementById('rightPanel').classList.add(correct ? 'flash-correct' : 'flash-wrong');
 
     if(correct){
       score++;
-      best = Math.max(best, score);
       setTimeout(() => {
-        leftPlayer = rightPlayer;
-        rightPlayer = pickNextRight(leftPlayer.id);
-        usedIds.add(rightPlayer.id);
-        renderRound();
+        leftPlayer = rightPlayer; rightPlayer = pickRightPlayer(leftPlayer.id);
+        usedIds.add(rightPlayer.id); renderRound();
       }, 850);
     } else {
       setTimeout(() => {
-        finalScore.textContent = score;
-        bestScoreLine.textContent = best;
+        document.getElementById('finalScore').textContent = score;
         showScreen('over');
       }, 950);
     }
   }
+  document.getElementById('playAgainBtn').addEventListener('click', () => document.getElementById('startBtn').click());
 
-  playAgainBtn.addEventListener('click', startGame);
-  changeCategoryBtn.addEventListener('click', () => showScreen('setup'));
+  // ==========================================
+  // MODULE 2: TACTICAL BOARD (LINEUP BUILDER)
+  // ==========================================
+  const pitch = document.getElementById('pitch');
+  let activeTokenForModal = null;
+  
+  // Default formation positions (X: left %, Y: top %)
+  const formations = {
+    5: [{x:50, y:88}, {x:25, y:65}, {x:75, y:65}, {x:50, y:40}, {x:50, y:15}],
+    7: [{x:50, y:88}, {x:20, y:70}, {x:50, y:70}, {x:80, y:70}, {x:35, y:45}, {x:65, y:45}, {x:50, y:20}],
+    9: [{x:50, y:88}, {x:20, y:72}, {x:50, y:72}, {x:80, y:72}, {x:20, y:48}, {x:50, y:48}, {x:80, y:48}, {x:35, y:22}, {x:65, y:22}],
+    11: [{x:50, y:88}, {x:15, y:70}, {x:38, y:70}, {x:62, y:70}, {x:85, y:70}, {x:15, y:45}, {x:38, y:45}, {x:62, y:45}, {x:85, y:45}, {x:35, y:20}, {x:65, y:20}]
+  };
 
-  function showScreen(name){
-    screenSetup.classList.toggle('active', name === 'setup');
-    screenGame.classList.toggle('active', name === 'game');
-    screenOver.classList.toggle('active', name === 'over');
-    scorePill.hidden = name === 'setup';
+  function initBuilder(){
+    showScreen('builder');
+    populateModal();
+    buildPitch(5); // default 5v5
   }
+
+  document.getElementById('formatSelector').addEventListener('click', (e) => {
+    if(e.target.tagName !== 'BUTTON') return;
+    document.querySelectorAll('#formatSelector button').forEach(b => b.classList.remove('active'));
+    e.target.classList.add('active');
+    buildPitch(Number(e.target.dataset.format));
+  });
+
+  function buildPitch(size){
+    // Remove old tokens
+    pitch.querySelectorAll('.pitch-token').forEach(t => t.remove());
+    const layout = formations[size];
+    layout.forEach((pos, i) => {
+      createToken(pos.x, pos.y, i+1);
+    });
+  }
+
+  function createToken(x, y, index){
+    const token = document.createElement('div');
+    token.className = 'pitch-token';
+    token.style.left = `${x}%`;
+    token.style.top = `${y}%`;
+    
+    // Default appearance
+    token.innerHTML = `
+      <img src="image_1ccf02.jpg" alt="Icon">
+      <div class="token-name">Jugador</div>
+    `;
+    
+    // Attach Drag & Click Logic
+    let startX, startY, hasMoved = false;
+    
+    token.addEventListener('touchstart', dragStart, {passive: false});
+    token.addEventListener('mousedown', dragStart);
+
+    function dragStart(e){
+      e.preventDefault();
+      const pt = e.touches ? e.touches[0] : e;
+      startX = pt.clientX; startY = pt.clientY; hasMoved = false;
+      token.style.zIndex = 50;
+      
+      document.addEventListener('touchmove', dragMove, {passive: false});
+      document.addEventListener('mousemove', dragMove);
+      document.addEventListener('touchend', dragEnd);
+      document.addEventListener('mouseup', dragEnd);
+    }
+    
+    function dragMove(e){
+      e.preventDefault();
+      const pt = e.touches ? e.touches[0] : e;
+      if(Math.abs(pt.clientX - startX) > 5 || Math.abs(pt.clientY - startY) > 5) hasMoved = true;
+      
+      if(hasMoved){
+        const rect = pitch.getBoundingClientRect();
+        let newX = pt.clientX - rect.left;
+        let newY = pt.clientY - rect.top;
+        // Keep inside bounds roughly
+        newX = Math.max(20, Math.min(newX, rect.width - 20));
+        newY = Math.max(20, Math.min(newY, rect.height - 20));
+        token.style.left = `${newX}px`;
+        token.style.top = `${newY}px`;
+      }
+    }
+    
+    function dragEnd(e){
+      document.removeEventListener('touchmove', dragMove);
+      document.removeEventListener('mousemove', dragMove);
+      document.removeEventListener('touchend', dragEnd);
+      document.removeEventListener('mouseup', dragEnd);
+      token.style.zIndex = 10;
+      
+      if(!hasMoved){
+        // It was a tap/click! Open modal to select player
+        activeTokenForModal = token;
+        document.getElementById('playerModal').classList.add('active');
+      }
+    }
+    
+    pitch.appendChild(token);
+  }
+
+  // --- Modal Logic ---
+  function populateModal(){
+    const rosterDiv = document.getElementById('modalRoster');
+    rosterDiv.innerHTML = '';
+    
+    // Add a "Clear" option
+    const clearEl = document.createElement('div');
+    clearEl.className = 'roster-card';
+    clearEl.innerHTML = `<img src="image_1ccf02.jpg"><div class="name">Quitar</div>`;
+    clearEl.onclick = () => assignPlayerToToken(null);
+    rosterDiv.appendChild(clearEl);
+
+    // List all players alphabetically
+    const sorted = [...playersData].sort((a,b) => a.name.localeCompare(b.name));
+    sorted.forEach(p => {
+      const el = document.createElement('div');
+      el.className = 'roster-card';
+      el.innerHTML = `<img src="${p.photo}" onerror="this.src='image_1ccf02.jpg'"><div class="name">${p.name}</div>`;
+      el.onclick = () => assignPlayerToToken(p);
+      rosterDiv.appendChild(el);
+    });
+  }
+
+  function assignPlayerToToken(playerData){
+    if(activeTokenForModal){
+      const img = activeTokenForModal.querySelector('img');
+      const nameBox = activeTokenForModal.querySelector('.token-name');
+      
+      if(!playerData){
+        img.src = 'image_1ccf02.jpg';
+        nameBox.textContent = 'Jugador';
+      } else {
+        img.src = playerData.photo;
+        img.onerror = () => img.src = 'image_1ccf02.jpg';
+        nameBox.textContent = playerData.name;
+      }
+    }
+    closeModal();
+  }
+
+  function closeModal(){
+    document.getElementById('playerModal').classList.remove('active');
+    activeTokenForModal = null;
+  }
+
+  // Expose public methods
+  return { showScreen, initBuilder, closeModal };
+
 })();
 </script>
 </body>
