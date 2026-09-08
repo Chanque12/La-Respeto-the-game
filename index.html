@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>La Respeto — ¿Más o Menos?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Teko:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #0c1a13;
+    --panel: #163526;
+    --panel-alt: #1e4230;
+    --line: rgba(244,240,230,0.16);
+    --gold: #e8b23d;
+    --gold-deep: #c99423;
+    --cream: #f4f0e6;
+    --cream-dim: rgba(244,240,230,0.62);
+    --danger: #d1554b;
+    --danger-deep: #a63b32;
+    --radius: 6px;
+  }
+  *{box-sizing:border-box;}
+  html,body{height:100%;}
+  body{
+    margin:0;
+    min-height:100vh;
+    background-color: var(--bg);
+    background-image:
+      repeating-linear-gradient(115deg, rgba(255,255,255,0.025) 0 40px, transparent 40px 80px);
+    color: var(--cream);
+    font-family: 'Archivo', sans-serif;
+    display:flex;
+    justify-content:center;
+    padding: 28px 14px 40px;
+  }
+  #app{
+    width:100%;
+    max-width: 480px;
+  }
+
+  /* ---- Scoreboard header ---- */
+  .scoreboard-bar{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding-bottom:18px;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 22px;
+  }
+  .crest{
+    width:44px; height:44px; flex:none;
+    border-radius:50%;
+    border:2px solid var(--gold);
+    outline: 1px solid rgba(232,178,61,0.35);
+    outline-offset: 3px;
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Teko', sans-serif;
+    font-size:20px; font-weight:600;
+    color: var(--gold);
+    background: radial-gradient(circle at 35% 30%, #1e4230, #0f2318);
+  }
+  .club-heading{ flex:1; min-width:0; }
+  .club-name{
+    font-family:'Teko', sans-serif;
+    font-size: 30px;
+    letter-spacing: 0.5px;
+    line-height:1;
+    font-weight:600;
+    text-transform: uppercase;
+  }
+  .club-sub{
+    font-size:12px;
+    color: var(--cream-dim);
+    margin-top:2px;
+  }
+  .score-pill{
+    flex:none;
+    text-align:right;
+    font-family:'Teko', sans-serif;
+    font-size:16px;
+    color: var(--cream-dim);
+    line-height:1.25;
+  }
+  .score-pill b{
+    color: var(--gold);
+    font-size:20px;
+    font-weight:600;
+  }
+
+  main{ display:none; }
+  main.active{ display:block; }
+
+  /* ---- Setup screen ---- */
+  .main-logo {
+    width: 100%;
+    max-width: 220px;
+    margin: 0 auto 24px auto;
+    display: block;
+    border-radius: var(--radius);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    border: 2px solid var(--gold);
+  }
+  
+  .setup-container {
+    text-align: center;
+  }
+
+  h1.section-title{
+    font-family:'Teko', sans-serif;
+    font-size: 26px;
+    font-weight:600;
+    text-transform: uppercase;
+    letter-spacing:0.3px;
+    margin: 0 0 4px;
+  }
+  p.section-hint{
+    color: var(--cream-dim);
+    font-size:14px;
+    margin: 0 0 20px;
+    line-height:1.5;
+  }
+
+  .stat-toggle{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap:10px;
+    margin-bottom:24px;
+  }
+  .stat-toggle button{
+    padding:14px 4px;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    color: var(--cream-dim);
+    font-family:'Archivo',sans-serif;
+    font-weight:600;
+    font-size:14px;
+    letter-spacing:0.2px;
+    cursor:pointer;
+    transition: all 0.2s;
+  }
+  .stat-toggle button:hover {
+    border-color: rgba(232,178,61,0.5);
+  }
+  .stat-toggle button.selected{
+    background: var(--gold);
+    border-color: var(--gold);
+    color: #241a05;
+  }
+
+  .primary-btn{
+    width:100%;
+    padding: 15px;
+    background: var(--gold);
+    border: none;
+    border-radius: var(--radius);
+    color: #241a05;
+    font-family:'Teko', sans-serif;
+    font-size:22px;
+    font-weight:600;
+    text-transform: uppercase;
+    letter-spacing:0.5px;
+    cursor:pointer;
+  }
+  .primary-btn:disabled{
+    background: var(--panel-alt);
+    color: var(--cream-dim);
+    cursor:not-allowed;
+  }
+  .secondary-btn{
+    width:100%;
+    padding: 13px;
+    background: transparent;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    color: var(--cream);
+    font-family:'Teko', sans-serif;
+    font-size:18px;
+    font-weight:600;
+    text-transform: uppercase;
+    letter-spacing:0.5px;
+    cursor:pointer;
+    margin-top:10px;
+  }
+  .secondary-btn:hover{ border-color: var(--gold); color: var(--gold); }
+
+  /* ---- Game screen ---- */
+  .duel-card{
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    overflow:hidden;
+    background: var(--panel);
+    margin-bottom: 18px;
+  }
+  .duel-panels{
+    display:flex;
+    position:relative;
+  }
+  .duel-panel{
+    flex:1;
+    padding: 34px 10px 28px;
+    text-align:center;
+    transition: background-color 0.35s ease, box-shadow 0.35s ease;
+  }
+  .duel-panel.left{ border-right: 1px solid var(--line); }
+  .vs-badge{
+    position:absolute;
+    top:50%; left:50%;
+    transform: translate(-50%,-50%);
+    width:38px; height:38px;
+    border-radius:50%;
+    background: var(--bg);
+    border: 2px solid var(--gold);
+    color: var(--gold);
+    font-family:'Teko',sans-serif;
+    font-size:14px;
+    font-weight:600;
+    display:flex; align-items:center; justify-content:center;
+    z-index:2;
+  }
+  .player-name{
+    font-family:'Teko', sans-serif;
+    font-size: 22px;
+    font-weight:600;
+    text-transform:uppercase;
+    letter-spacing:0.3px;
+    margin-bottom: 10px;
+    word-break: break-word;
+  }
+  .player-value{
+    font-family:'Teko', sans-serif;
+    font-size: 54px;
+    font-weight:600;
+    line-height:1;
+    color: var(--gold);
+  }
+  .player-value.hidden-value{
+    color: var(--cream-dim);
+    font-size: 44px;
+  }
+  .player-stat-label{
+    margin-top:6px;
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:0.7px;
+    color: var(--cream-dim);
+  }
+  .duel-panel.flash-correct{ background: rgba(232,178,61,0.16); box-shadow: inset 0 0 0 1px var(--gold); }
+  .duel-panel.flash-wrong{ background: rgba(209,85,75,0.16); box-shadow: inset 0 0 0 1px var(--danger); }
+
+  .prompt-text{
+    text-align:center;
+    font-size:15px;
+    color: var(--cream-dim);
+    margin: 0 0 14px;
+    line-height:1.5;
+  }
+  .prompt-text b{ color: var(--cream); }
+
+  .guess-buttons{
+    display:flex;
+    gap:10px;
+  }
+  .guess-btn{
+    flex:1;
+    padding: 16px 8px;
+    background: var(--panel-alt);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    color: var(--cream);
+    font-family:'Teko', sans-serif;
+    font-size: 19px;
+    font-weight:600;
+    text-transform:uppercase;
+    letter-spacing:0.4px;
+    cursor:pointer;
+  }
+  .guess-btn:hover:not(:disabled){ border-color: var(--gold); color: var(--gold); }
+  .guess-btn:disabled{ cursor: default; opacity:0.55; }
+
+  /* ---- Game over screen ---- */
+  .over-box{
+    text-align:center;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--panel);
+    padding: 34px 20px;
+    margin-bottom: 16px;
+  }
+  .over-box .flag{
+    font-family:'Teko', sans-serif;
+    font-size:16px;
+    color: var(--danger);
+    text-transform:uppercase;
+    letter-spacing:0.6px;
+    margin-bottom: 8px;
+  }
+  .over-box .final-score{
+    font-family:'Teko', sans-serif;
+    font-size: 74px;
+    line-height:1;
+    color: var(--gold);
+    font-weight:600;
+  }
+  .over-box .final-label{
+    font-size:13px;
+    color: var(--cream-dim);
+    margin-top:6px;
+  }
+  .over-box .best-line{
+    margin-top:16px;
+    font-size:13px;
+    color: var(--cream-dim);
+  }
+  .over-box .best-line b{ color: var(--cream); }
+
+  @media (max-width:360px){
+    .player-value{ font-size:42px; }
+    .club-name{ font-size:26px; }
+  }
+</style>
+</head>
+<body>
+<div id="app">
+
+  <div class="scoreboard-bar">
+    <div class="crest">LR</div>
+    <div class="club-heading">
+      <div class="club-name">La Respeto</div>
+      <div class="club-sub">¿Más o Menos?</div>
+    </div>
+    <div class="score-pill" id="scorePill" hidden></div>
+  </div>
+
+  <!-- SETUP SCREEN -->
+  <main id="screen-setup" class="active">
+    <div class="setup-container">
+      <img src="image_1ccf02.jpg" alt="Escudo La Respeto" class="main-logo">
+      <h1 class="section-title">Elegí la categoría</h1>
+      <p class="section-hint">Seleccioná qué estadística querés comparar.</p>
+
+      <div class="stat-toggle">
+        <button type="button" id="statGoals" class="selected">Goles Hist.</button>
+        <button type="button" id="statGoals2026">Goles 2026</button>
+        <button type="button" id="statAssists">Asist. Hist.</button>
+        <button type="button" id="statAssists2026">Asist. 2026</button>
+      </div>
+
+      <button type="button" class="primary-btn" id="startBtn">Jugar</button>
+    </div>
+  </main>
+
+  <!-- GAME SCREEN -->
+  <main id="screen-game">
+    <div class="duel-card">
+      <div class="duel-panels">
+        <div class="duel-panel left" id="leftPanel">
+          <div class="player-name" id="leftName">—</div>
+          <div class="player-value" id="leftValue">0</div>
+          <div class="player-stat-label" id="leftStatLabel">GOLES</div>
+        </div>
+        <div class="vs-badge">VS</div>
+        <div class="duel-panel right" id="rightPanel">
+          <div class="player-name" id="rightName">—</div>
+          <div class="player-value hidden-value" id="rightValue">?</div>
+          <div class="player-stat-label" id="rightStatLabel">GOLES</div>
+        </div>
+      </div>
+    </div>
+
+    <p class="prompt-text" id="promptText"></p>
+
+    <div class="guess-buttons">
+      <button type="button" class="guess-btn" id="btnMore">Más ▲</button>
+      <button type="button" class="guess-btn" id="btnLess">Menos ▼</button>
+    </div>
+  </main>
+
+  <!-- GAME OVER SCREEN -->
+  <main id="screen-over">
+    <div class="over-box">
+      <div class="flag">Fin del juego</div>
+      <div class="final-score" id="finalScore">0</div>
+      <div class="final-label">comparaciones acertadas</div>
+      <div class="best-line">Récord de la sesión: <b id="bestScoreLine">0</b></div>
+    </div>
+    <button type="button" class="primary-btn" id="playAgainBtn">Jugar de nuevo</button>
+    <button type="button" class="secondary-btn" id="changeCategoryBtn">Cambiar categoría</button>
+  </main>
+
+</div>
+
+<script>
+(function(){
+  // ---------- Roster (La Respeto Data) ----------
+  const playersData = [
+    { id: 'p1', name: 'Prepu', goals: 76, goals2026: 32, assists: 20, assists2026: 8 },
+    { id: 'p2', name: 'Fran', goals: 46, goals2026: 19, assists: 14, assists2026: 4 },
+    { id: 'p3', name: 'Fede', goals: 34, goals2026: 18, assists: 31, assists2026: 21 },
+    { id: 'p4', name: 'Angel', goals: 58, goals2026: 17, assists: 22, assists2026: 7 },
+    { id: 'p5', name: 'Manu', goals: 11, goals2026: 11, assists: 3, assists2026: 3 },
+    { id: 'p6', name: 'SDF', goals: 14, goals2026: 10, assists: 13, assists2026: 6 },
+    { id: 'p7', name: 'Facu', goals: 32, goals2026: 10, assists: 22, assists2026: 10 },
+    { id: 'p8', name: 'Delirio', goals: 18, goals2026: 9, assists: 21, assists2026: 14 },
+    { id: 'p9', name: 'Mati Vildosa', goals: 15, goals2026: 9, assists: 3, assists2026: 2 },
+    { id: 'p10', name: 'Bordon', goals: 24, goals2026: 9, assists: 14, assists2026: 7 },
+    { id: 'p11', name: 'Cuchu', goals: 26, goals2026: 8, assists: 12, assists2026: 2 },
+    { id: 'p12', name: 'Maxi', goals: 14, goals2026: 7, assists: 7, assists2026: 5 },
+    { id: 'p13', name: 'Nacho', goals: 15, goals2026: 6, assists: 10, assists2026: 4 },
+    { id: 'p14', name: 'Gol en contra', goals: 18, goals2026: 4, assists: 0, assists2026: 0 },
+    { id: 'p15', name: 'Mateo', goals: 4, goals2026: 4, assists: 7, assists2026: 7 },
+    { id: 'p16', name: 'Mati Vila', goals: 30, goals2026: 3, assists: 31, assists2026: 6 },
+    { id: 'p17', name: 'Chris', goals: 9, goals2026: 3, assists: 6, assists2026: 1 },
+    { id: 'p18', name: 'Pipi', goals: 2, goals2026: 2, assists: 0, assists2026: 0 },
+    { id: 'p19', name: 'Agusan', goals: 2, goals2026: 2, assists: 3, assists2026: 3 },
+    { id: 'p20', name: 'Lauti', goals: 2, goals2026: 1, assists: 4, assists2026: 4 },
+    { id: 'p21', name: 'Agus', goals: 1, goals2026: 1, assists: 0, assists2026: 0 },
+    { id: 'p22', name: 'Rama', goals: 26, goals2026: 0, assists: 23, assists2026: 0 },
+    { id: 'p23', name: 'Andres', goals: 6, goals2026: 0, assists: 1, assists2026: 0 },
+    { id: 'p24', name: 'Mago', goals: 3, goals2026: 0, assists: 0, assists2026: 0 },
+    { id: 'p25', name: 'Bruno', goals: 1, goals2026: 0, assists: 0, assists2026: 0 },
+    { id: 'p26', name: 'Nahuel', goals: 1, goals2026: 0, assists: 1, assists2026: 0 },
+    { id: 'p27', name: 'Pola', goals: 1, goals2026: 0, assists: 0, assists2026: 0 },
+    { id: 'p28', name: 'Ale', goals: 0, goals2026: 0, assists: 1, assists2026: 1 },
+    { id: 'p29', name: 'Juli gil', goals: 0, goals2026: 0, assists: 1, assists2026: 1 }
+  ];
+
+  // ---------- State ----------
+  let statKey = 'goals'; 
+  let pool = [];          
+  let usedIds = new Set();
+  let leftPlayer = null, rightPlayer = null;
+  let score = 0;
+  let best = 0;
+  let roundLocked = false;
+
+  // ---------- Elements ----------
+  const startBtn = document.getElementById('startBtn');
+  
+  const statGoalsBtn = document.getElementById('statGoals');
+  const statGoals2026Btn = document.getElementById('statGoals2026');
+  const statAssistsBtn = document.getElementById('statAssists');
+  const statAssists2026Btn = document.getElementById('statAssists2026');
+
+  const screenSetup = document.getElementById('screen-setup');
+  const screenGame = document.getElementById('screen-game');
+  const screenOver = document.getElementById('screen-over');
+  const scorePill = document.getElementById('scorePill');
+
+  const leftPanel = document.getElementById('leftPanel');
+  const rightPanel = document.getElementById('rightPanel');
+  const leftName = document.getElementById('leftName');
+  const rightName = document.getElementById('rightName');
+  const leftValue = document.getElementById('leftValue');
+  const rightValue = document.getElementById('rightValue');
+  const leftStatLabel = document.getElementById('leftStatLabel');
+  const rightStatLabel = document.getElementById('rightStatLabel');
+  const promptText = document.getElementById('promptText');
+  const btnMore = document.getElementById('btnMore');
+  const btnLess = document.getElementById('btnLess');
+
+  const finalScore = document.getElementById('finalScore');
+  const bestScoreLine = document.getElementById('bestScoreLine');
+  const playAgainBtn = document.getElementById('playAgainBtn');
+  const changeCategoryBtn = document.getElementById('changeCategoryBtn');
+
+  // ---------- Setup ----------
+  statGoalsBtn.addEventListener('click', () => setStat('goals'));
+  statGoals2026Btn.addEventListener('click', () => setStat('goals2026'));
+  statAssistsBtn.addEventListener('click', () => setStat('assists'));
+  statAssists2026Btn.addEventListener('click', () => setStat('assists2026'));
+
+  function setStat(key){
+    statKey = key;
+    statGoalsBtn.classList.toggle('selected', key === 'goals');
+    statGoals2026Btn.classList.toggle('selected', key === 'goals2026');
+    statAssistsBtn.classList.toggle('selected', key === 'assists');
+    statAssists2026Btn.classList.toggle('selected', key === 'assists2026');
+  }
+
+  function statLabel(){
+    if(statKey === 'goals') return 'GOLES HIST.';
+    if(statKey === 'goals2026') return 'GOLES 2026';
+    if(statKey === 'assists') return 'ASIST. HIST.';
+    if(statKey === 'assists2026') return 'ASIST. 2026';
+  }
+  function statLabelLower(){
+    if(statKey === 'goals') return 'goles históricos';
+    if(statKey === 'goals2026') return 'goles en 2026';
+    if(statKey === 'assists') return 'asistencias históricas';
+    if(statKey === 'assists2026') return 'asistencias en 2026';
+  }
+
+  // ---------- Start Game Logic ----------
+  startBtn.addEventListener('click', () => {
+    // Filtramos solo los jugadores que tengan un valor mayor a 0 en la estadística elegida
+    pool = playersData.filter(p => p[statKey] > 0);
+
+    if(pool.length < 2){
+      alert('No hay suficientes jugadores con estadísticas para jugar en esta categoría.');
+      return;
+    }
+    startGame();
+  });
+
+  function pickRandomFrom(list){
+    return list[Math.floor(Math.random() * list.length)];
+  }
+
+  function pickNextRight(excludeId){
+    let candidates = pool.filter(p => p.id !== excludeId && !usedIds.has(p.id));
+    if(candidates.length === 0){
+      usedIds = new Set([excludeId]);
+      candidates = pool.filter(p => p.id !== excludeId);
+    }
+    return pickRandomFrom(candidates);
+  }
+
+  function startGame(){
+    score = 0;
+    usedIds = new Set();
+
+    const first = pickRandomFrom(pool);
+    usedIds.add(first.id);
+    leftPlayer = first;
+    rightPlayer = pickNextRight(first.id);
+    usedIds.add(rightPlayer.id);
+
+    showScreen('game');
+    renderRound();
+  }
+
+  function renderRound(){
+    roundLocked = false;
+    leftPanel.classList.remove('flash-correct', 'flash-wrong');
+    rightPanel.classList.remove('flash-correct', 'flash-wrong');
+
+    leftName.textContent = leftPlayer.name;
+    leftValue.textContent = leftPlayer[statKey];
+    leftValue.classList.remove('hidden-value');
+    leftStatLabel.textContent = statLabel();
+
+    rightName.textContent = rightPlayer.name;
+    rightValue.textContent = '?';
+    rightValue.classList.add('hidden-value');
+    rightStatLabel.textContent = statLabel();
+
+    promptText.innerHTML = `¿<b>${rightPlayer.name}</b> tiene más o menos ${statLabelLower()} que <b>${leftPlayer.name}</b>?`;
+
+    btnMore.disabled = false;
+    btnLess.disabled = false;
+
+    updateScorePill();
+  }
+
+  function updateScorePill(){
+    scorePill.hidden = false;
+    scorePill.innerHTML = `Racha<br><b>${score}</b>`;
+  }
+
+  btnMore.addEventListener('click', () => handleGuess('more'));
+  btnLess.addEventListener('click', () => handleGuess('less'));
+
+  function handleGuess(choice){
+    if(roundLocked) return;
+    roundLocked = true;
+    btnMore.disabled = true;
+    btnLess.disabled = true;
+
+    const lv = leftPlayer[statKey];
+    const rv = rightPlayer[statKey];
+    let correct;
+    if(rv === lv) correct = true;
+    else correct = choice === 'more' ? rv > lv : rv < lv;
+
+    rightValue.textContent = rv;
+    rightValue.classList.remove('hidden-value');
+    rightPanel.classList.add(correct ? 'flash-correct' : 'flash-wrong');
+    leftPanel.classList.add(correct ? 'flash-correct' : 'flash-wrong');
+
+    if(correct){
+      score++;
+      best = Math.max(best, score);
+      setTimeout(() => {
+        leftPlayer = rightPlayer;
+        rightPlayer = pickNextRight(leftPlayer.id);
+        usedIds.add(rightPlayer.id);
+        renderRound();
+      }, 850);
+    } else {
+      setTimeout(() => {
+        finalScore.textContent = score;
+        bestScoreLine.textContent = best;
+        showScreen('over');
+      }, 950);
+    }
+  }
+
+  playAgainBtn.addEventListener('click', startGame);
+  changeCategoryBtn.addEventListener('click', () => showScreen('setup'));
+
+  function showScreen(name){
+    screenSetup.classList.toggle('active', name === 'setup');
+    screenGame.classList.toggle('active', name === 'game');
+    screenOver.classList.toggle('active', name === 'over');
+    scorePill.hidden = name === 'setup';
+  }
+})();
+</script>
+</body>
+</html>
