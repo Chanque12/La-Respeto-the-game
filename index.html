@@ -128,7 +128,7 @@
     margin-bottom:24px;
   }
   .stat-toggle button{
-    padding:14px 4px;
+    padding:12px 4px;
     background: var(--panel);
     border: 1px solid var(--line);
     border-radius: var(--radius);
@@ -147,6 +147,16 @@
     background: var(--gold);
     border-color: var(--gold);
     color: #241a05;
+  }
+  .stat-toggle button.danger-selected{
+    background: var(--danger);
+    border-color: var(--danger);
+    color: white;
+  }
+  .stat-toggle button.success-selected{
+    background: #4caf50;
+    border-color: #4caf50;
+    color: white;
   }
 
   .primary-btn{
@@ -345,6 +355,8 @@
         <button type="button" id="statGoals2026">Goles 2026</button>
         <button type="button" id="statAssists">Asist. Hist.</button>
         <button type="button" id="statAssists2026">Asist. 2026</button>
+        <button type="button" id="statWins">Victorias</button>
+        <button type="button" id="statLosses">Derrotas</button>
       </div>
 
       <button type="button" class="primary-btn" id="startBtn">Jugar</button>
@@ -393,37 +405,40 @@
 
 <script>
 (function(){
-  // ---------- Roster (La Respeto Data) ----------
+  // ---------- Roster (La Respeto Data + Historial) ----------
   const playersData = [
-    { id: 'p1', name: 'Prepu', goals: 76, goals2026: 32, assists: 20, assists2026: 8 },
-    { id: 'p2', name: 'Fran', goals: 46, goals2026: 19, assists: 14, assists2026: 4 },
-    { id: 'p3', name: 'Fede', goals: 34, goals2026: 18, assists: 31, assists2026: 21 },
-    { id: 'p4', name: 'Angel', goals: 58, goals2026: 17, assists: 22, assists2026: 7 },
-    { id: 'p5', name: 'Manu', goals: 11, goals2026: 11, assists: 3, assists2026: 3 },
-    { id: 'p6', name: 'SDF', goals: 14, goals2026: 10, assists: 13, assists2026: 6 },
-    { id: 'p7', name: 'Facu', goals: 32, goals2026: 10, assists: 22, assists2026: 10 },
-    { id: 'p8', name: 'Delirio', goals: 18, goals2026: 9, assists: 21, assists2026: 14 },
-    { id: 'p9', name: 'Mati Vildosa', goals: 15, goals2026: 9, assists: 3, assists2026: 2 },
-    { id: 'p10', name: 'Bordon', goals: 24, goals2026: 9, assists: 14, assists2026: 7 },
-    { id: 'p11', name: 'Cuchu', goals: 26, goals2026: 8, assists: 12, assists2026: 2 },
-    { id: 'p12', name: 'Maxi', goals: 14, goals2026: 7, assists: 7, assists2026: 5 },
-    { id: 'p13', name: 'Nacho', goals: 15, goals2026: 6, assists: 10, assists2026: 4 },
-    { id: 'p14', name: 'Gol en contra', goals: 18, goals2026: 4, assists: 0, assists2026: 0 },
-    { id: 'p15', name: 'Mateo', goals: 4, goals2026: 4, assists: 7, assists2026: 7 },
-    { id: 'p16', name: 'Mati Vila', goals: 30, goals2026: 3, assists: 31, assists2026: 6 },
-    { id: 'p17', name: 'Chris', goals: 9, goals2026: 3, assists: 6, assists2026: 1 },
-    { id: 'p18', name: 'Pipi', goals: 2, goals2026: 2, assists: 0, assists2026: 0 },
-    { id: 'p19', name: 'Agusan', goals: 2, goals2026: 2, assists: 3, assists2026: 3 },
-    { id: 'p20', name: 'Lauti', goals: 2, goals2026: 1, assists: 4, assists2026: 4 },
-    { id: 'p21', name: 'Agus', goals: 1, goals2026: 1, assists: 0, assists2026: 0 },
-    { id: 'p22', name: 'Rama', goals: 26, goals2026: 0, assists: 23, assists2026: 0 },
-    { id: 'p23', name: 'Andres', goals: 6, goals2026: 0, assists: 1, assists2026: 0 },
-    { id: 'p24', name: 'Mago', goals: 3, goals2026: 0, assists: 0, assists2026: 0 },
-    { id: 'p25', name: 'Bruno', goals: 1, goals2026: 0, assists: 0, assists2026: 0 },
-    { id: 'p26', name: 'Nahuel', goals: 1, goals2026: 0, assists: 1, assists2026: 0 },
-    { id: 'p27', name: 'Pola', goals: 1, goals2026: 0, assists: 0, assists2026: 0 },
-    { id: 'p28', name: 'Ale', goals: 0, goals2026: 0, assists: 1, assists2026: 1 },
-    { id: 'p29', name: 'Juli gil', goals: 0, goals2026: 0, assists: 1, assists2026: 1 }
+    { id: 'p1', name: 'Prepu', goals: 76, goals2026: 32, assists: 20, assists2026: 8, wins: 6, losses: 23 },
+    { id: 'p2', name: 'Fran', goals: 46, goals2026: 19, assists: 14, assists2026: 4, wins: 18, losses: 8 },
+    { id: 'p3', name: 'Fede', goals: 34, goals2026: 18, assists: 31, assists2026: 21, wins: 20, losses: 9 },
+    { id: 'p4', name: 'Angel', goals: 58, goals2026: 17, assists: 22, assists2026: 7, wins: 19, losses: 7 },
+    { id: 'p5', name: 'Manu', goals: 11, goals2026: 11, assists: 3, assists2026: 3, wins: 3, losses: 1 },
+    { id: 'p6', name: 'SDF', goals: 14, goals2026: 10, assists: 13, assists2026: 6, wins: 7, losses: 7 },
+    { id: 'p7', name: 'Facu', goals: 32, goals2026: 10, assists: 22, assists2026: 10, wins: 12, losses: 19 },
+    { id: 'p8', name: 'Delirio', goals: 18, goals2026: 9, assists: 21, assists2026: 14, wins: 12, losses: 12 },
+    { id: 'p9', name: 'Mati Vildosa', goals: 15, goals2026: 9, assists: 3, assists2026: 2, wins: 11, losses: 14 },
+    { id: 'p10', name: 'Bordon', goals: 24, goals2026: 9, assists: 14, assists2026: 7, wins: 5, losses: 1 },
+    { id: 'p11', name: 'Cuchu', goals: 26, goals2026: 8, assists: 12, assists2026: 2, wins: 10, losses: 4 },
+    { id: 'p12', name: 'Maxi', goals: 14, goals2026: 7, assists: 7, assists2026: 5, wins: 8, losses: 13 },
+    { id: 'p13', name: 'Nacho', goals: 15, goals2026: 6, assists: 10, assists2026: 4, wins: 12, losses: 17 },
+    { id: 'p14', name: 'Gol en contra', goals: 18, goals2026: 4, assists: 0, assists2026: 0, wins: 0, losses: 0 },
+    { id: 'p15', name: 'Mateo', goals: 4, goals2026: 4, assists: 7, assists2026: 7, wins: 7, losses: 3 },
+    { id: 'p16', name: 'Mati Vila', goals: 30, goals2026: 3, assists: 31, assists2026: 6, wins: 21, losses: 7 },
+    { id: 'p17', name: 'Chris', goals: 9, goals2026: 3, assists: 6, assists2026: 1, wins: 9, losses: 9 },
+    { id: 'p18', name: 'Pipi', goals: 2, goals2026: 2, assists: 0, assists2026: 0, wins: 0, losses: 0 },
+    { id: 'p19', name: 'Agusan', goals: 2, goals2026: 2, assists: 3, assists2026: 3, wins: 4, losses: 4 },
+    { id: 'p20', name: 'Lauti', goals: 2, goals2026: 1, assists: 4, assists2026: 4, wins: 4, losses: 4 },
+    { id: 'p21', name: 'Agus', goals: 1, goals2026: 1, assists: 0, assists2026: 0, wins: 0, losses: 0 },
+    { id: 'p22', name: 'Rama', goals: 26, goals2026: 0, assists: 23, assists2026: 0, wins: 13, losses: 4 },
+    { id: 'p23', name: 'Andres', goals: 6, goals2026: 0, assists: 1, assists2026: 0, wins: 1, losses: 2 },
+    { id: 'p24', name: 'Mago', goals: 3, goals2026: 0, assists: 0, assists2026: 0, wins: 0, losses: 0 },
+    { id: 'p25', name: 'Bruno', goals: 1, goals2026: 0, assists: 0, assists2026: 0, wins: 0, losses: 0 },
+    { id: 'p26', name: 'Nahuel', goals: 1, goals2026: 0, assists: 1, assists2026: 0, wins: 0, losses: 0 },
+    { id: 'p27', name: 'Pola', goals: 1, goals2026: 0, assists: 0, assists2026: 0, wins: 1, losses: 2 },
+    { id: 'p28', name: 'Ale', goals: 0, goals2026: 0, assists: 1, assists2026: 1, wins: 2, losses: 1 },
+    { id: 'p29', name: 'Juli gil', goals: 0, goals2026: 0, assists: 1, assists2026: 1, wins: 0, losses: 0 },
+    { id: 'p30', name: 'Aquiles', goals: 0, goals2026: 0, assists: 0, assists2026: 0, wins: 8, losses: 6 },
+    { id: 'p31', name: 'Hofler', goals: 0, goals2026: 0, assists: 0, assists2026: 0, wins: 1, losses: 0 },
+    { id: 'p32', name: 'Jorgito', goals: 0, goals2026: 0, assists: 0, assists2026: 0, wins: 1, losses: 0 }
   ];
 
   // ---------- State ----------
@@ -442,6 +457,8 @@
   const statGoals2026Btn = document.getElementById('statGoals2026');
   const statAssistsBtn = document.getElementById('statAssists');
   const statAssists2026Btn = document.getElementById('statAssists2026');
+  const statWinsBtn = document.getElementById('statWins');
+  const statLossesBtn = document.getElementById('statLosses');
 
   const screenSetup = document.getElementById('screen-setup');
   const screenGame = document.getElementById('screen-game');
@@ -470,6 +487,8 @@
   statGoals2026Btn.addEventListener('click', () => setStat('goals2026'));
   statAssistsBtn.addEventListener('click', () => setStat('assists'));
   statAssists2026Btn.addEventListener('click', () => setStat('assists2026'));
+  statWinsBtn.addEventListener('click', () => setStat('wins'));
+  statLossesBtn.addEventListener('click', () => setStat('losses'));
 
   function setStat(key){
     statKey = key;
@@ -477,6 +496,8 @@
     statGoals2026Btn.classList.toggle('selected', key === 'goals2026');
     statAssistsBtn.classList.toggle('selected', key === 'assists');
     statAssists2026Btn.classList.toggle('selected', key === 'assists2026');
+    statWinsBtn.classList.toggle('success-selected', key === 'wins');
+    statLossesBtn.classList.toggle('danger-selected', key === 'losses');
   }
 
   function statLabel(){
@@ -484,12 +505,16 @@
     if(statKey === 'goals2026') return 'GOLES 2026';
     if(statKey === 'assists') return 'ASIST. HIST.';
     if(statKey === 'assists2026') return 'ASIST. 2026';
+    if(statKey === 'wins') return 'VICTORIAS';
+    if(statKey === 'losses') return 'DERROTAS';
   }
   function statLabelLower(){
     if(statKey === 'goals') return 'goles históricos';
     if(statKey === 'goals2026') return 'goles en 2026';
     if(statKey === 'assists') return 'asistencias históricas';
     if(statKey === 'assists2026') return 'asistencias en 2026';
+    if(statKey === 'wins') return 'victorias';
+    if(statKey === 'losses') return 'derrotas';
   }
 
   // ---------- Start Game Logic ----------
