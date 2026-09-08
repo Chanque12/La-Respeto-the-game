@@ -148,8 +148,14 @@
   .close-modal { background:none; border:none; color:var(--gold); font-size:24px; cursor:pointer;}
   .modal-body { flex:1; overflow-y:auto; padding: 16px; display:grid; grid-template-columns: repeat(auto-fill, minmax(70px, 1fr)); gap:12px; align-content: start; }
   .roster-card { text-align:center; cursor:pointer; }
-  .roster-card img { width:54px; height:54px; border-radius:50%; object-fit:cover; border:2px solid var(--line); margin-bottom:4px; }
-  .roster-card:hover img { border-color: var(--gold); }
+  
+  /* Actualizado para la foto y el botón de quitar */
+  .roster-card img, .roster-card .clear-icon { 
+    width:54px; height:54px; border-radius:50%; object-fit:cover; border:2px solid var(--line); margin: 0 auto 4px auto; display: flex; align-items: center; justify-content: center;
+  }
+  .roster-card .clear-icon { background: var(--panel-alt); color: var(--danger); font-size: 24px; }
+  .roster-card:hover img, .roster-card:hover .clear-icon { border-color: var(--gold); }
+  
   .roster-card .name { font-size:11px; font-weight:600; color:var(--cream); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
   /* ---- Game over screen ---- */
@@ -528,10 +534,10 @@ const app = (function(){
     const rosterDiv = document.getElementById('modalRoster');
     rosterDiv.innerHTML = '';
     
-    // Add a "Clear" option
+    // Opción para quitar jugador (Ahora con la cruz roja en vez del escudo)
     const clearEl = document.createElement('div');
     clearEl.className = 'roster-card';
-    clearEl.innerHTML = `<img src="image_1ccf02.jpg"><div class="name">Quitar</div>`;
+    clearEl.innerHTML = `<div class="clear-icon">✕</div><div class="name">Quitar</div>`;
     clearEl.onclick = () => assignPlayerToToken(null);
     rosterDiv.appendChild(clearEl);
 
