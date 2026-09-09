@@ -137,7 +137,7 @@
   .penalty-area-top { position: absolute; top: 0; left: 25%; width: 50%; height: 15%; border: 2px solid rgba(255,255,255,0.4); border-top: none; }
   .penalty-area-bottom { position: absolute; bottom: 0; left: 25%; width: 50%; height: 15%; border: 2px solid rgba(255,255,255,0.4); border-bottom: none; }
   
-  /* Canvas para dibujar (cubre toda la board-area) */
+  /* Canvas para dibujar */
   #tacticCanvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 20; pointer-events: none; }
 
   /* Tokens */
@@ -163,10 +163,31 @@
   .pitch-token.rival-token .token-name { border-color: var(--danger); }
   .generic-icon { display:flex; align-items:center; justify-content:center; color:white; font-size:18px; font-weight:bold; }
 
-  /* Reducir tamaño de tokens si hay 2 canchas activas para que no colisionen en celulares */
+  /* Reducir tamaño de tokens si hay 2 canchas activas */
   .pitches-wrapper.dual .pitch-token { width: 54px; }
   .pitches-wrapper.dual .pitch-token img, .pitches-wrapper.dual .pitch-token .generic-icon { width: 32px; height: 32px; }
   .pitches-wrapper.dual .pitch-token .token-name { font-size: 10px; padding: 1px 4px; }
+
+  /* ---- Sorteo (Raffle) Screen ---- */
+  .raffle-grid { display:grid; grid-template-columns: repeat(auto-fill, minmax(70px, 1fr)); gap:12px; max-height: 50vh; overflow-y:auto; padding-right:5px; margin-bottom: 20px;}
+  .raffle-card { text-align:center; cursor:pointer; opacity: 0.35; filter: grayscale(1); transition: all 0.2s; }
+  .raffle-card.active { opacity: 1; filter: grayscale(0); }
+  .raffle-card img { width:54px; height:54px; border-radius:50%; object-fit:cover; border:2px solid var(--line); margin-bottom:4px; transition: 0.2s; }
+  .raffle-card.active img { border-color: var(--gold); box-shadow: 0 0 10px rgba(255,199,0,0.3); }
+  .raffle-card .name { font-size:11px; font-weight:600; color:var(--cream); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  
+  .teams-container { display:flex; gap:12px; margin-top:20px; }
+  .team-box { flex:1; background:var(--panel); border-radius:var(--radius); padding:12px; }
+  .team-box.team1 { border: 2px solid var(--gold); box-shadow: inset 0 0 20px rgba(255,199,0,0.05); }
+  .team-box.team2 { border: 2px solid var(--danger); box-shadow: inset 0 0 20px rgba(209,85,75,0.05); }
+  .team-box h3 { text-align:center; margin: 0 0 12px 0; font-family:'Teko', sans-serif; font-size:24px; text-transform:uppercase; letter-spacing:0.5px;}
+  .team-box.team1 h3 { color: var(--gold); }
+  .team-box.team2 h3 { color: var(--danger); }
+  
+  .team-player { display:flex; align-items:center; gap:8px; margin-bottom:10px; padding-bottom: 6px; border-bottom: 1px solid var(--line);}
+  .team-player:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0;}
+  .team-player img { width:36px; height:36px; border-radius:50%; object-fit:cover; border:1px solid rgba(255,255,255,0.2);}
+  .team-player span { font-size:14px; font-weight:600; color:var(--cream);}
 
   /* ---- Modal Picker ---- */
   .modal-overlay { position: fixed; top:0; left:0; right:0; bottom:0; background: rgba(0,0,0,0.9); z-index: 999; display: flex; flex-direction: column; opacity: 0; pointer-events: none; transition: opacity 0.2s; }
@@ -208,6 +229,7 @@
       <div class="menu-options">
         <button type="button" class="primary-btn" onclick="app.showScreen('setup')">Jugar: ¿Más o Menos?</button>
         <button type="button" class="secondary-btn" style="border-color: var(--gold); color: var(--gold);" onclick="app.initBuilder()">Pizarrón Táctico</button>
+        <button type="button" class="secondary-btn" style="border-color: var(--cream-dim);" onclick="app.initRaffle()">Sorteo de Equipos</button>
       </div>
     </div>
   </main>
@@ -292,10 +314,8 @@
     </div>
     
     <div class="board-area" id="boardArea">
-      <!-- Canvas de dibujo unificado -->
       <canvas id="tacticCanvas"></canvas>
       
-      <!-- Contenedor de las canchas -->
       <div class="pitches-wrapper" id="pitchesWrapper">
         <div class="pitch-container" id="pitch1">
           <div class="penalty-area-top"></div>
@@ -310,10 +330,51 @@
     </div>
     
     <p style="text-align:center; font-size:12px; color:var(--cream-dim); margin-top:-6px; margin-bottom: 16px;">
-      <b>Toque corto</b>: Asignar nombre/foto &nbsp;|&nbsp; <b>Mover 🖐️</b>: Reposicionar ficha
+      <b>Toque corto</b>: Asignar jugador &nbsp;|&nbsp; <b>Mover 🖐️</b>: Reposicionar ficha
     </p>
 
     <button type="button" class="secondary-btn" onclick="app.showScreen('menu')">Volver al Menú</button>
+  </main>
+
+  <!-- RAFFLE SCREEN (Sorteo) -->
+  <main id="screen-raffle">
+    <!-- Paso 1: Selección -->
+    <div id="raffleSetup">
+      <h1 class="section-title" style="text-align:center;">Sorteo de Equipos</h1>
+      <p class="section-hint" style="text-align:center;">Seleccioná quiénes juegan hoy:</p>
+      
+      <div style="display:flex; justify-content:space-between; margin-bottom:12px; align-items:center;">
+        <span style="font-size:14px; color:var(--gold); font-weight:bold;" id="raffleCount">0 Jugadores</span>
+        <div style="display:flex; gap:8px;">
+          <button type="button" onclick="app.toggleAllRaffle(true)" style="background:var(--panel-alt); border:1px solid var(--line); color:var(--cream); border-radius:4px; padding:4px 10px; cursor:pointer;">Todos</button>
+          <button type="button" onclick="app.toggleAllRaffle(false)" style="background:var(--panel-alt); border:1px solid var(--line); color:var(--cream); border-radius:4px; padding:4px 10px; cursor:pointer;">Ninguno</button>
+        </div>
+      </div>
+
+      <div class="raffle-grid" id="raffleGrid"></div>
+      
+      <button type="button" class="primary-btn" onclick="app.drawTeams()">Sortear Equipos</button>
+      <button type="button" class="secondary-btn" onclick="app.showScreen('menu')">Volver al Menú</button>
+    </div>
+
+    <!-- Paso 2: Resultado -->
+    <div id="raffleResult" style="display:none;">
+      <h1 class="section-title" style="text-align:center; color:var(--gold);">Equipos Confirmados</h1>
+      
+      <div class="teams-container">
+        <div class="team-box team1">
+          <h3>Equipo 1</h3>
+          <div id="team1List"></div>
+        </div>
+        <div class="team-box team2">
+          <h3>Equipo 2</h3>
+          <div id="team2List"></div>
+        </div>
+      </div>
+
+      <button type="button" class="primary-btn" style="margin-top:20px;" onclick="app.drawTeams()">Resortear Jugadores</button>
+      <button type="button" class="secondary-btn" onclick="document.getElementById('raffleResult').style.display='none'; document.getElementById('raffleSetup').style.display='block';">Volver a Selección</button>
+    </div>
   </main>
 
   <!-- PLAYER PICKER MODAL -->
@@ -366,19 +427,27 @@ const app = (function(){
     { id: 'p32', name: 'Jorgito', photo: 'jorgito.jpg', goals: 0, goals2026: 0, assists: 0, assists2026: 0, wins: 1, losses: 0 }
   ];
 
+  // Lista ordenada alfabéticamente (excluyendo gol en contra)
+  const playableRoster = [...playersData]
+      .filter(p => p.name !== 'Gol en contra')
+      .sort((a,b) => a.name.localeCompare(b.name));
+
   // ---------- Navigation ----------
-  const screens = ['menu', 'setup', 'game', 'over', 'builder'];
+  const screens = ['menu', 'setup', 'game', 'over', 'builder', 'raffle'];
+  
   function showScreen(name){
     screens.forEach(s => {
       document.getElementById('screen-'+s).classList.toggle('active', s === name);
     });
     document.getElementById('scorePill').hidden = (name !== 'game');
     const subtitle = document.getElementById('headerSubtitle');
+    
     if(name === 'menu' || name === 'builder') subtitle.textContent = 'App Oficial';
+    else if(name === 'raffle') subtitle.textContent = 'Sorteo';
     else subtitle.textContent = '¿Más o Menos?';
     
     if(name === 'builder'){
-      setTimeout(initCanvas, 50); // Resize canvas when screen is visible
+      setTimeout(initCanvas, 50); 
     }
   }
 
@@ -491,7 +560,6 @@ const app = (function(){
   let currentFormat = 5;
   let isRivalActive = false;
   
-  // Posiciones Verticales (X: left %, Y: top %)
   const formationsVertical = {
     5: [{x:50, y:88}, {x:25, y:65}, {x:75, y:65}, {x:50, y:40}, {x:50, y:15}],
     7: [{x:50, y:88}, {x:20, y:70}, {x:50, y:70}, {x:80, y:70}, {x:35, y:45}, {x:65, y:45}, {x:50, y:20}],
@@ -527,17 +595,15 @@ const app = (function(){
     }
     
     buildPitch(currentFormat);
-    setTimeout(initCanvas, 10); // Recalcular tamaño del canvas al aparecer la segunda cancha
+    setTimeout(initCanvas, 10); 
   });
 
   function buildPitch(size){
     pitch1.querySelectorAll('.pitch-token').forEach(t => t.remove());
     pitch2.querySelectorAll('.pitch-token').forEach(t => t.remove());
     
-    // Team 1 (La Respeto)
     formationsVertical[size].forEach(pos => createToken(pitch1, pos.x, pos.y, false));
     
-    // Team 2 (Rival)
     if(isRivalActive){
       formationsVertical[size].forEach(pos => createToken(pitch2, pos.x, pos.y, true));
     }
@@ -560,7 +626,7 @@ const app = (function(){
     token.addEventListener('mousedown', dragStart);
 
     function dragStart(e){
-      if(currentTool !== 'move') return; // Bloquear si está dibujando
+      if(currentTool !== 'move') return; 
       e.preventDefault();
       const pt = e.touches ? e.touches[0] : e;
       startX = pt.clientX; startY = pt.clientY; hasMoved = false;
@@ -595,13 +661,9 @@ const app = (function(){
       token.style.zIndex = 10;
       
       if(!hasMoved){
-        if(isRival){
-          let newName = prompt("Nombre del jugador rival:");
-          if(newName) token.querySelector('.token-name').textContent = newName.substring(0,12);
-        } else {
-          activeTokenForModal = token;
-          document.getElementById('playerModal').classList.add('active');
-        }
+        // AHORA AMBOS (Rival y Propio) ABREN EL MODAL PARA ELEGIR JUGADORES
+        activeTokenForModal = token;
+        document.getElementById('playerModal').classList.add('active');
       }
     }
     targetPitch.appendChild(token);
@@ -618,11 +680,7 @@ const app = (function(){
     clearEl.onclick = () => assignPlayerToToken(null);
     rosterDiv.appendChild(clearEl);
 
-    const sorted = [...playersData]
-      .filter(p => p.name !== 'Gol en contra')
-      .sort((a,b) => a.name.localeCompare(b.name));
-      
-    sorted.forEach(p => {
+    playableRoster.forEach(p => {
       const el = document.createElement('div');
       el.className = 'roster-card';
       el.innerHTML = `<img src="${p.photo}" onerror="this.src='image_1ccf02.jpg'"><div class="name">${p.name}</div>`;
@@ -633,13 +691,16 @@ const app = (function(){
 
   function assignPlayerToToken(playerData){
     if(activeTokenForModal){
-      const img = activeTokenForModal.querySelector('img');
-      const nameBox = activeTokenForModal.querySelector('.token-name');
       if(!playerData){
-        img.src = 'image_1ccf02.jpg'; nameBox.textContent = 'Jugador';
+        if(activeTokenForModal.classList.contains('rival-token')){
+          activeTokenForModal.innerHTML = `<div class="generic-icon">?</div><div class="token-name">Rival</div>`;
+        } else {
+          activeTokenForModal.innerHTML = `<img src="image_1ccf02.jpg" alt="Icon"><div class="token-name">Jugador</div>`;
+        }
       } else {
-        img.src = playerData.photo; img.onerror = () => img.src = 'image_1ccf02.jpg';
-        nameBox.textContent = playerData.name;
+        // Se reemplaza con la foto del jugador elegido. 
+        // Si es rival, el CSS se encarga de ponerle el borde rojo.
+        activeTokenForModal.innerHTML = `<img src="${playerData.photo}" onerror="this.src='image_1ccf02.jpg'" alt="Icon"><div class="token-name">${playerData.name.substring(0,12)}</div>`;
       }
     }
     closeModal();
@@ -666,8 +727,6 @@ const app = (function(){
     currentTool = tool;
     [btnMove, btnDraw, btnErase].forEach(b => b.classList.remove('active'));
     btnElement.classList.add('active');
-    
-    // Si la herramienta no es 'mover', el canvas intercepta toques para poder dibujar
     cvs.style.pointerEvents = (tool === 'move') ? 'none' : 'auto';
   }
 
@@ -683,7 +742,6 @@ const app = (function(){
     ctx.lineJoin = 'round';
   }
   
-  // Recalcular tamaño de pantalla en caso de girar el celular
   window.addEventListener('resize', initCanvas);
 
   function getPos(e) {
@@ -720,12 +778,106 @@ const app = (function(){
   cvs.addEventListener('mousedown', startDraw);
   cvs.addEventListener('mousemove', drawMove);
   window.addEventListener('mouseup', endDraw);
-  
   cvs.addEventListener('touchstart', startDraw, {passive:false});
   cvs.addEventListener('touchmove', drawMove, {passive:false});
   window.addEventListener('touchend', endDraw);
 
-  return { showScreen, initBuilder, closeModal };
+
+  // ==========================================
+  // MODULE 3: RAFFLE (SORTEO DE EQUIPOS)
+  // ==========================================
+  let raffleSelection = new Set();
+  let raffleInitialized = false;
+
+  function initRaffle(){
+    showScreen('raffle');
+    document.getElementById('raffleResult').style.display = 'none';
+    document.getElementById('raffleSetup').style.display = 'block';
+
+    if(!raffleInitialized){
+      const grid = document.getElementById('raffleGrid');
+      grid.innerHTML = '';
+      
+      playableRoster.forEach(p => {
+        const el = document.createElement('div');
+        el.className = 'raffle-card';
+        el.dataset.id = p.id;
+        el.innerHTML = `<img src="${p.photo}" onerror="this.src='image_1ccf02.jpg'"><div class="name">${p.name}</div>`;
+        
+        el.onclick = () => {
+          if(raffleSelection.has(p.id)){
+            raffleSelection.delete(p.id);
+            el.classList.remove('active');
+          } else {
+            raffleSelection.add(p.id);
+            el.classList.add('active');
+          }
+          updateRaffleCount();
+        };
+        grid.appendChild(el);
+      });
+      raffleInitialized = true;
+    }
+  }
+
+  function toggleAllRaffle(selectAll){
+    const cards = document.querySelectorAll('.raffle-card');
+    cards.forEach(card => {
+      const id = card.dataset.id;
+      if(selectAll){
+        raffleSelection.add(id);
+        card.classList.add('active');
+      } else {
+        raffleSelection.delete(id);
+        card.classList.remove('active');
+      }
+    });
+    updateRaffleCount();
+  }
+
+  function updateRaffleCount(){
+    const count = raffleSelection.size;
+    document.getElementById('raffleCount').textContent = `${count} Jugador${count !== 1 ? 'es' : ''}`;
+  }
+
+  function drawTeams(){
+    const selectedIds = Array.from(raffleSelection);
+    if(selectedIds.length < 2) {
+      alert("¡Elegí al menos 2 jugadores para poder armar equipos!");
+      return;
+    }
+
+    // Mezclar jugadores (Algoritmo Fisher-Yates)
+    let shuffled = [...selectedIds];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+
+    // Dividir en 2 equipos
+    const half = Math.ceil(shuffled.length / 2);
+    const team1Ids = shuffled.slice(0, half);
+    const team2Ids = shuffled.slice(half);
+
+    // Renderizar Equipo 1
+    const t1Html = team1Ids.map(id => {
+      const p = playersData.find(pl => pl.id === id);
+      return `<div class="team-player"><img src="${p.photo}" onerror="this.src='image_1ccf02.jpg'"><span>${p.name}</span></div>`;
+    }).join('');
+    document.getElementById('team1List').innerHTML = t1Html;
+
+    // Renderizar Equipo 2
+    const t2Html = team2Ids.map(id => {
+      const p = playersData.find(pl => pl.id === id);
+      return `<div class="team-player"><img src="${p.photo}" onerror="this.src='image_1ccf02.jpg'"><span>${p.name}</span></div>`;
+    }).join('');
+    document.getElementById('team2List').innerHTML = t2Html;
+
+    document.getElementById('raffleSetup').style.display = 'none';
+    document.getElementById('raffleResult').style.display = 'block';
+  }
+
+  return { showScreen, initBuilder, closeModal, initRaffle, toggleAllRaffle, drawTeams };
 
 })();
 </script>
