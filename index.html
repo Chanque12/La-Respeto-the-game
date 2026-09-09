@@ -8,31 +8,26 @@
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Teko:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    /* TEMÁTICA SCORPION (MORTAL KOMBAT) */
-    --bg: #050505;          /* Negro profundo */
-    --panel: #141414;       /* Gris muy oscuro para tarjetas */
-    --panel-alt: #1f1f1f;   /* Gris un poco más claro para botones */
+    /* TEMÁTICA SCORPION */
+    --bg: #050505;          
+    --panel: #141414;       
+    --panel-alt: #1f1f1f;   
     --line: rgba(255, 255, 255, 0.1); 
-    --gold: #ffc700;        /* Amarillo Scorpion */
-    --gold-deep: #cc9f00;   /* Amarillo oscuro */
-    --cream: #ffffff;       /* Blanco puro para mejor contraste */
+    --gold: #ffc700;        
+    --gold-deep: #cc9f00;   
+    --cream: #ffffff;       
     --cream-dim: rgba(255, 255, 255, 0.65);
     --danger: #d1554b;
-    --pitch: #1e5c3a;       /* Verde un poco más oscuro para la cancha */
+    --pitch: #1e5c3a;       
     --radius: 6px;
   }
   *{box-sizing:border-box;}
-  html,body{height:100%;}
+  html,body{height:100%; overscroll-behavior: none;}
   body{
-    margin:0;
-    min-height:100vh;
-    background-color: var(--bg);
+    margin:0; min-height:100vh; background-color: var(--bg);
     background-image: repeating-linear-gradient(115deg, rgba(255,255,255,0.015) 0 40px, transparent 40px 80px);
-    color: var(--cream);
-    font-family: 'Archivo', sans-serif;
-    display:flex;
-    justify-content:center;
-    padding: 20px 14px 40px;
+    color: var(--cream); font-family: 'Archivo', sans-serif;
+    display:flex; justify-content:center; padding: 20px 14px 40px;
   }
   #app{ width:100%; max-width: 480px; }
 
@@ -42,8 +37,7 @@
     padding-bottom:18px; border-bottom: 1px solid var(--line); margin-bottom: 22px;
   }
   .crest{
-    width:44px; height:44px; flex:none;
-    border-radius:50%; border:2px solid var(--gold);
+    width:44px; height:44px; flex:none; border-radius:50%; border:2px solid var(--gold);
     outline: 1px solid rgba(255, 199, 0, 0.35); outline-offset: 3px;
     display:flex; align-items:center; justify-content:center;
     font-family:'Teko', sans-serif; font-size:20px; font-weight:600;
@@ -80,15 +74,14 @@
   .stat-toggle{ display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:24px; }
   .stat-toggle button{
     padding:12px 4px; background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius);
-    color: var(--cream-dim); font-family:'Archivo',sans-serif; font-weight:600; font-size:14px; cursor:pointer;
-    transition: all 0.2s;
+    color: var(--cream-dim); font-family:'Archivo',sans-serif; font-weight:600; font-size:14px; cursor:pointer; transition: all 0.2s;
   }
   .stat-toggle button:hover { border-color: rgba(255,199,0,0.5); }
   .stat-toggle button.selected{ background: var(--gold); border-color: var(--gold); color: #000; }
   .stat-toggle button.danger-selected{ background: var(--danger); border-color: var(--danger); color: white; }
   .stat-toggle button.success-selected{ background: #4caf50; border-color: #4caf50; color: white; }
 
-  /* ---- Game screen ---- */
+  /* ---- Game screen (Higher/Lower) ---- */
   .duel-card{ border: 1px solid var(--line); border-radius: var(--radius); overflow:hidden; background: var(--panel); margin-bottom: 18px; box-shadow: 0 4px 20px rgba(0,0,0,0.5); }
   .duel-panels{ display:flex; position:relative; }
   .duel-panel{ flex:1; padding: 24px 8px 20px; text-align:center; transition: background-color 0.35s ease; }
@@ -111,54 +104,39 @@
   .format-selector { display:flex; gap:8px; margin-bottom: 16px; }
   .format-selector button { flex:1; padding: 10px 0; background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); color: var(--cream-dim); font-family:'Teko',sans-serif; font-size:18px; font-weight:600; cursor:pointer; transition: all 0.2s;}
   .format-selector button.active { background: var(--gold); color: #000; border-color: var(--gold); }
-  
-  .pitch-container {
-    width: 100%; height: 500px; background: var(--pitch); border: 2px solid #fff;
-    position: relative; overflow: hidden; border-radius: 4px; touch-action: none;
-    box-shadow: inset 0 0 60px rgba(0,0,0,0.6); margin-bottom: 16px;
-  }
+  .pitch-container { width: 100%; height: 500px; background: var(--pitch); border: 2px solid #fff; position: relative; overflow: hidden; border-radius: 4px; touch-action: none; box-shadow: inset 0 0 60px rgba(0,0,0,0.6); margin-bottom: 16px; }
   .pitch-container::before { content: ''; position: absolute; top: 50%; left: 0; right: 0; height: 2px; background: rgba(255,255,255,0.5); transform: translateY(-50%); }
   .pitch-container::after { content: ''; position: absolute; top: 50%; left: 50%; width: 70px; height: 70px; border: 2px solid rgba(255,255,255,0.5); border-radius: 50%; transform: translate(-50%, -50%); }
   .penalty-area-top { position: absolute; top: 0; left: 25%; width: 50%; height: 15%; border: 2px solid rgba(255,255,255,0.5); border-top: none; }
   .penalty-area-bottom { position: absolute; bottom: 0; left: 25%; width: 50%; height: 15%; border: 2px solid rgba(255,255,255,0.5); border-bottom: none; }
-  
-  .pitch-token {
-    position: absolute; transform: translate(-50%, -50%);
-    display: flex; flex-direction: column; align-items: center;
-    width: 64px; cursor: pointer; z-index: 10;
+  .pitch-token { position: absolute; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; width: 64px; cursor: pointer; z-index: 10; }
+  .pitch-token img { width: 38px; height: 38px; border-radius: 50%; border: 2px solid #fff; background: var(--bg); pointer-events: none; object-fit: cover; box-shadow: 0 4px 6px rgba(0,0,0,0.8); }
+  .pitch-token .token-name { background: rgba(0,0,0,0.85); color: #fff; font-size: 11px; padding: 2px 6px; border-radius: 12px; margin-top: -6px; text-align: center; white-space: nowrap; pointer-events: none; z-index: 2; border: 1px solid var(--gold); }
+
+  /* ---- Penalties Screen ---- */
+  .penalty-canvas-container {
+    width: 100%; aspect-ratio: 4/5; background: var(--pitch); border: 2px solid var(--gold); border-radius: var(--radius); overflow: hidden; position: relative; margin-bottom: 16px; box-shadow: inset 0 0 60px rgba(0,0,0,0.6);
   }
-  .pitch-token img {
-    width: 38px; height: 38px; border-radius: 50%; border: 2px solid #fff;
-    background: var(--bg); pointer-events: none; object-fit: cover;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.8);
-  }
-  .pitch-token .token-name {
-    background: rgba(0,0,0,0.85); color: #fff; font-size: 11px;
-    padding: 2px 6px; border-radius: 12px; margin-top: -6px;
-    text-align: center; white-space: nowrap; pointer-events: none; z-index: 2;
-    border: 1px solid var(--gold);
-  }
+  canvas { display: block; width: 100%; height: 100%; touch-action: none; }
+  .penalty-ui { position: absolute; top: 10px; left: 10px; right: 10px; display: flex; justify-content: space-between; pointer-events: none; }
+  .penalty-score { background: rgba(0,0,0,0.7); padding: 4px 12px; border-radius: 4px; font-family: 'Teko', sans-serif; font-size: 20px; color: var(--gold); border: 1px solid var(--gold); }
+  .penalty-msg { position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%); font-family: 'Teko', sans-serif; font-size: 50px; text-transform: uppercase; color: #fff; text-shadow: 0 4px 10px rgba(0,0,0,0.8); opacity: 0; pointer-events: none; transition: opacity 0.2s, transform 0.2s; }
+  .penalty-msg.show { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
+  .penalty-msg.goal { color: var(--gold); }
+  .penalty-msg.miss { color: var(--danger); }
+  .hint-text { text-align: center; font-size: 13px; color: var(--cream-dim); margin: -6px 0 16px; line-height: 1.4; }
 
   /* ---- Modal Picker ---- */
-  .modal-overlay {
-    position: fixed; top:0; left:0; right:0; bottom:0;
-    background: rgba(0,0,0,0.9); z-index: 999;
-    display: flex; flex-direction: column;
-    opacity: 0; pointer-events: none; transition: opacity 0.2s;
-  }
+  .modal-overlay { position: fixed; top:0; left:0; right:0; bottom:0; background: rgba(0,0,0,0.9); z-index: 999; display: flex; flex-direction: column; opacity: 0; pointer-events: none; transition: opacity 0.2s; }
   .modal-overlay.active { opacity: 1; pointer-events: auto; }
   .modal-header { padding: 16px; background: var(--panel); border-bottom: 1px solid var(--gold); display:flex; justify-content: space-between; align-items:center; }
   .modal-header h2 { font-family:'Teko',sans-serif; margin:0; font-size:22px; text-transform:uppercase; color: var(--gold);}
   .close-modal { background:none; border:none; color:var(--cream); font-size:24px; cursor:pointer;}
   .modal-body { flex:1; overflow-y:auto; padding: 16px; display:grid; grid-template-columns: repeat(auto-fill, minmax(70px, 1fr)); gap:12px; align-content: start; }
   .roster-card { text-align:center; cursor:pointer; }
-  
-  .roster-card img, .roster-card .clear-icon { 
-    width:54px; height:54px; border-radius:50%; object-fit:cover; border:2px solid var(--line); margin: 0 auto 4px auto; display: flex; align-items: center; justify-content: center; transition: border-color 0.2s;
-  }
+  .roster-card img, .roster-card .clear-icon { width:54px; height:54px; border-radius:50%; object-fit:cover; border:2px solid var(--line); margin: 0 auto 4px auto; display: flex; align-items: center; justify-content: center; transition: border-color 0.2s; }
   .roster-card .clear-icon { background: var(--panel-alt); color: var(--danger); font-size: 24px; }
   .roster-card:hover img, .roster-card:hover .clear-icon { border-color: var(--gold); }
-  
   .roster-card .name { font-size:11px; font-weight:600; color:var(--cream); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
   /* ---- Game over screen ---- */
@@ -187,17 +165,17 @@
       
       <div class="menu-options">
         <button type="button" class="primary-btn" onclick="app.showScreen('setup')">Jugar: ¿Más o Menos?</button>
-        <button type="button" class="secondary-btn" style="border-color: var(--gold); color: var(--gold);" onclick="app.initBuilder()">Pizarrón Táctico</button>
+        <button type="button" class="secondary-btn" style="border-color: var(--gold); color: var(--gold);" onclick="app.openModal('penalties')">Minijuego: Penales</button>
+        <button type="button" class="secondary-btn" onclick="app.initBuilder()">Pizarrón Táctico</button>
       </div>
     </div>
   </main>
 
-  <!-- SETUP SCREEN (Game) -->
+  <!-- SETUP SCREEN (Higher/Lower) -->
   <main id="screen-setup">
     <div style="text-align: center;">
       <h1 class="section-title">Elegí la categoría</h1>
       <p class="section-hint">Seleccioná qué estadística querés comparar.</p>
-
       <div class="stat-toggle">
         <button type="button" id="statGoals" class="selected">Goles Hist.</button>
         <button type="button" id="statGoals2026">Goles 2026</button>
@@ -206,13 +184,12 @@
         <button type="button" id="statWins">Victorias</button>
         <button type="button" id="statLosses">Derrotas</button>
       </div>
-
       <button type="button" class="primary-btn" id="startBtn">Empezar a Jugar</button>
       <button type="button" class="secondary-btn" onclick="app.showScreen('menu')">Volver al Menú</button>
     </div>
   </main>
 
-  <!-- GAME SCREEN -->
+  <!-- GAME SCREEN (Higher/Lower) -->
   <main id="screen-game">
     <div class="duel-card">
       <div class="duel-panels">
@@ -238,6 +215,22 @@
     </div>
   </main>
 
+  <!-- PENALTIES SCREEN -->
+  <main id="screen-penalties">
+    <div class="penalty-canvas-container">
+      <canvas id="gameCanvas" width="400" height="500"></canvas>
+      <div class="penalty-ui">
+        <div class="penalty-score">Goles: <span id="penScore">0</span></div>
+        <div class="penalty-score" style="border-color:var(--line); color:var(--cream-dim);">Récord: <span id="penBest">0</span></div>
+      </div>
+      <div id="penMsg" class="penalty-msg">¡GOLAZO!</div>
+    </div>
+    <p class="hint-text">
+      <b>¿Cómo patear?</b><br>Tocá el jugador, arrastrá el dedo hacia abajo para apuntar y soltá para patear. (Estilo Angry Birds).
+    </p>
+    <button type="button" class="secondary-btn" onclick="app.stopPenalties()">Volver al Menú</button>
+  </main>
+
   <!-- GAME OVER SCREEN -->
   <main id="screen-over">
     <div class="over-box">
@@ -257,24 +250,20 @@
       <button type="button" data-format="9">Fútbol 9</button>
       <button type="button" data-format="11">Fútbol 11</button>
     </div>
-    
     <div class="pitch-container" id="pitch">
       <div class="penalty-area-top"></div>
       <div class="penalty-area-bottom"></div>
-      <!-- Tokens render here -->
     </div>
-    
     <p style="text-align:center; font-size:12px; color:var(--cream-dim); margin-top:-6px; margin-bottom: 16px;">
       <b>Toque rápido</b>: Cambiar jugador &nbsp;|&nbsp; <b>Mantener y mover</b>: Cambiar posición
     </p>
-
     <button type="button" class="secondary-btn" onclick="app.showScreen('menu')">Volver al Menú</button>
   </main>
 
   <!-- PLAYER PICKER MODAL -->
   <div class="modal-overlay" id="playerModal">
     <div class="modal-header">
-      <h2>Elegir Jugador</h2>
+      <h2 id="modalTitle">Elegir Jugador</h2>
       <button class="close-modal" onclick="app.closeModal()">✕</button>
     </div>
     <div class="modal-body" id="modalRoster"></div>
@@ -322,7 +311,7 @@ const app = (function(){
   ];
 
   // ---------- Navigation ----------
-  const screens = ['menu', 'setup', 'game', 'over', 'builder'];
+  const screens = ['menu', 'setup', 'game', 'over', 'builder', 'penalties'];
   function showScreen(name){
     screens.forEach(s => {
       document.getElementById('screen-'+s).classList.toggle('active', s === name);
@@ -330,247 +319,59 @@ const app = (function(){
     document.getElementById('scorePill').hidden = (name !== 'game');
     const subtitle = document.getElementById('headerSubtitle');
     if(name === 'menu' || name === 'builder') subtitle.textContent = 'App Oficial';
+    else if(name === 'penalties') subtitle.textContent = 'Minijuego';
     else subtitle.textContent = '¿Más o Menos?';
   }
 
   // ==========================================
-  // MODULE 1: HIGHER OR LOWER GAME
+  // MODAL LOGIC (Shared for Builder and Penalties)
   // ==========================================
-  let statKey = 'goals', pool = [], usedIds = new Set(), leftPlayer = null, rightPlayer = null, score = 0, roundLocked = false;
-  
-  const setupBtns = {
-    goals: document.getElementById('statGoals'), goals2026: document.getElementById('statGoals2026'),
-    assists: document.getElementById('statAssists'), assists2026: document.getElementById('statAssists2026'),
-    wins: document.getElementById('statWins'), losses: document.getElementById('statLosses')
-  };
-
-  Object.keys(setupBtns).forEach(k => {
-    setupBtns[k].addEventListener('click', () => {
-      statKey = k;
-      Object.values(setupBtns).forEach(b => b.className = '');
-      if(k === 'wins') setupBtns[k].className = 'success-selected';
-      else if(k === 'losses') setupBtns[k].className = 'danger-selected';
-      else setupBtns[k].className = 'selected';
-    });
-  });
-
-  function getStatLabel(){
-    const dict = { goals: 'GOLES HIST.', goals2026: 'GOLES 2026', assists: 'ASIST. HIST.', assists2026: 'ASIST. 2026', wins: 'VICTORIAS', losses: 'DERROTAS' };
-    return dict[statKey];
-  }
-
-  document.getElementById('startBtn').addEventListener('click', () => {
-    pool = playersData.filter(p => p[statKey] > 0);
-    if(pool.length < 2) return alert('No hay suficientes jugadores con estadísticas en esta categoría.');
-    score = 0; usedIds = new Set();
-    leftPlayer = pool[Math.floor(Math.random() * pool.length)];
-    usedIds.add(leftPlayer.id);
-    rightPlayer = pickRightPlayer(leftPlayer.id);
-    usedIds.add(rightPlayer.id);
-    showScreen('game'); renderRound();
-  });
-
-  function pickRightPlayer(exId){
-    let cands = pool.filter(p => p.id !== exId && !usedIds.has(p.id));
-    if(!cands.length) { usedIds = new Set([exId]); cands = pool.filter(p => p.id !== exId); }
-    return cands[Math.floor(Math.random() * cands.length)];
-  }
-
-  function renderRound(){
-    roundLocked = false;
-    document.getElementById('leftPanel').className = 'duel-panel left';
-    document.getElementById('rightPanel').className = 'duel-panel right';
-
-    const lp = document.getElementById('leftPhoto');
-    lp.src = leftPlayer.photo; lp.onerror = () => lp.src = 'image_1ccf02.jpg';
-    document.getElementById('leftName').textContent = leftPlayer.name;
-    document.getElementById('leftValue').textContent = leftPlayer[statKey];
-    document.getElementById('leftValue').className = 'player-value';
-    document.getElementById('leftStatLabel').textContent = getStatLabel();
-
-    const rp = document.getElementById('rightPhoto');
-    rp.src = rightPlayer.photo; rp.onerror = () => rp.src = 'image_1ccf02.jpg';
-    document.getElementById('rightName').textContent = rightPlayer.name;
-    document.getElementById('rightValue').textContent = '?';
-    document.getElementById('rightValue').className = 'player-value hidden-value';
-    document.getElementById('rightStatLabel').textContent = getStatLabel();
-
-    document.getElementById('promptText').innerHTML = `¿<b>${rightPlayer.name}</b> tiene más o menos ${getStatLabel().toLowerCase()} que <b>${leftPlayer.name}</b>?`;
-    document.getElementById('btnMore').disabled = false;
-    document.getElementById('btnLess').disabled = false;
-    document.getElementById('scorePill').innerHTML = `Racha<br><b>${score}</b>`;
-  }
-
-  document.getElementById('btnMore').addEventListener('click', () => handleGuess('more'));
-  document.getElementById('btnLess').addEventListener('click', () => handleGuess('less'));
-
-  function handleGuess(choice){
-    if(roundLocked) return; roundLocked = true;
-    document.getElementById('btnMore').disabled = true;
-    document.getElementById('btnLess').disabled = true;
-
-    const lv = leftPlayer[statKey], rv = rightPlayer[statKey];
-    const correct = (rv === lv) || (choice === 'more' ? rv > lv : rv < lv);
-
-    const rvEl = document.getElementById('rightValue');
-    rvEl.textContent = rv; rvEl.className = 'player-value';
-    document.getElementById('leftPanel').classList.add(correct ? 'flash-correct' : 'flash-wrong');
-    document.getElementById('rightPanel').classList.add(correct ? 'flash-correct' : 'flash-wrong');
-
-    if(correct){
-      score++;
-      setTimeout(() => {
-        leftPlayer = rightPlayer; rightPlayer = pickRightPlayer(leftPlayer.id);
-        usedIds.add(rightPlayer.id); renderRound();
-      }, 850);
-    } else {
-      setTimeout(() => {
-        document.getElementById('finalScore').textContent = score;
-        showScreen('over');
-      }, 950);
-    }
-  }
-  document.getElementById('playAgainBtn').addEventListener('click', () => document.getElementById('startBtn').click());
-
-  // ==========================================
-  // MODULE 2: TACTICAL BOARD (LINEUP BUILDER)
-  // ==========================================
-  const pitch = document.getElementById('pitch');
+  let modalMode = 'builder'; 
   let activeTokenForModal = null;
-  
-  // Default formation positions (X: left %, Y: top %)
-  const formations = {
-    5: [{x:50, y:88}, {x:25, y:65}, {x:75, y:65}, {x:50, y:40}, {x:50, y:15}],
-    7: [{x:50, y:88}, {x:20, y:70}, {x:50, y:70}, {x:80, y:70}, {x:35, y:45}, {x:65, y:45}, {x:50, y:20}],
-    9: [{x:50, y:88}, {x:20, y:72}, {x:50, y:72}, {x:80, y:72}, {x:20, y:48}, {x:50, y:48}, {x:80, y:48}, {x:35, y:22}, {x:65, y:22}],
-    11: [{x:50, y:88}, {x:15, y:70}, {x:38, y:70}, {x:62, y:70}, {x:85, y:70}, {x:15, y:45}, {x:38, y:45}, {x:62, y:45}, {x:85, y:45}, {x:35, y:20}, {x:65, y:20}]
-  };
 
-  function initBuilder(){
-    showScreen('builder');
-    populateModal();
-    buildPitch(5); // default 5v5
-  }
-
-  document.getElementById('formatSelector').addEventListener('click', (e) => {
-    if(e.target.tagName !== 'BUTTON') return;
-    document.querySelectorAll('#formatSelector button').forEach(b => b.classList.remove('active'));
-    e.target.classList.add('active');
-    buildPitch(Number(e.target.dataset.format));
-  });
-
-  function buildPitch(size){
-    // Remove old tokens
-    pitch.querySelectorAll('.pitch-token').forEach(t => t.remove());
-    const layout = formations[size];
-    layout.forEach((pos, i) => {
-      createToken(pos.x, pos.y, i+1);
-    });
-  }
-
-  function createToken(x, y, index){
-    const token = document.createElement('div');
-    token.className = 'pitch-token';
-    token.style.left = `${x}%`;
-    token.style.top = `${y}%`;
+  function openModal(mode){
+    modalMode = mode;
+    document.getElementById('playerModal').classList.add('active');
     
-    // Default appearance
-    token.innerHTML = `
-      <img src="image_1ccf02.jpg" alt="Icon">
-      <div class="token-name">Jugador</div>
-    `;
-    
-    // Attach Drag & Click Logic
-    let startX, startY, hasMoved = false;
-    
-    token.addEventListener('touchstart', dragStart, {passive: false});
-    token.addEventListener('mousedown', dragStart);
-
-    function dragStart(e){
-      e.preventDefault();
-      const pt = e.touches ? e.touches[0] : e;
-      startX = pt.clientX; startY = pt.clientY; hasMoved = false;
-      token.style.zIndex = 50;
-      
-      document.addEventListener('touchmove', dragMove, {passive: false});
-      document.addEventListener('mousemove', dragMove);
-      document.addEventListener('touchend', dragEnd);
-      document.addEventListener('mouseup', dragEnd);
-    }
-    
-    function dragMove(e){
-      e.preventDefault();
-      const pt = e.touches ? e.touches[0] : e;
-      if(Math.abs(pt.clientX - startX) > 5 || Math.abs(pt.clientY - startY) > 5) hasMoved = true;
-      
-      if(hasMoved){
-        const rect = pitch.getBoundingClientRect();
-        let newX = pt.clientX - rect.left;
-        let newY = pt.clientY - rect.top;
-        // Keep inside bounds roughly
-        newX = Math.max(20, Math.min(newX, rect.width - 20));
-        newY = Math.max(20, Math.min(newY, rect.height - 20));
-        token.style.left = `${newX}px`;
-        token.style.top = `${newY}px`;
-      }
-    }
-    
-    function dragEnd(e){
-      document.removeEventListener('touchmove', dragMove);
-      document.removeEventListener('mousemove', dragMove);
-      document.removeEventListener('touchend', dragEnd);
-      document.removeEventListener('mouseup', dragEnd);
-      token.style.zIndex = 10;
-      
-      if(!hasMoved){
-        // It was a tap/click! Open modal to select player
-        activeTokenForModal = token;
-        document.getElementById('playerModal').classList.add('active');
-      }
-    }
-    
-    pitch.appendChild(token);
-  }
-
-  // --- Modal Logic ---
-  function populateModal(){
     const rosterDiv = document.getElementById('modalRoster');
     rosterDiv.innerHTML = '';
     
-    // Opción para quitar jugador
-    const clearEl = document.createElement('div');
-    clearEl.className = 'roster-card';
-    clearEl.innerHTML = `<div class="clear-icon">✕</div><div class="name">Quitar</div>`;
-    clearEl.onclick = () => assignPlayerToToken(null);
-    rosterDiv.appendChild(clearEl);
+    if(mode === 'builder'){
+      document.getElementById('modalTitle').textContent = 'Elegir Jugador';
+      const clearEl = document.createElement('div');
+      clearEl.className = 'roster-card';
+      clearEl.innerHTML = `<div class="clear-icon">✕</div><div class="name">Quitar</div>`;
+      clearEl.onclick = () => assignPlayer(null);
+      rosterDiv.appendChild(clearEl);
+    } else if (mode === 'penalties') {
+      document.getElementById('modalTitle').textContent = 'Elegir Pateador';
+    }
 
-    // Listar todos los jugadores alfabéticamente (Excluyendo a "Gol en contra")
-    const sorted = [...playersData]
-      .filter(p => p.name !== 'Gol en contra')
-      .sort((a,b) => a.name.localeCompare(b.name));
+    const sorted = [...playersData].filter(p => p.name !== 'Gol en contra').sort((a,b) => a.name.localeCompare(b.name));
+    // En penales, no podemos elegir a Chris porque ataja
+    const finalRoster = mode === 'penalties' ? sorted.filter(p => p.name !== 'Chris') : sorted;
       
-    sorted.forEach(p => {
+    finalRoster.forEach(p => {
       const el = document.createElement('div');
       el.className = 'roster-card';
       el.innerHTML = `<img src="${p.photo}" onerror="this.src='image_1ccf02.jpg'"><div class="name">${p.name}</div>`;
-      el.onclick = () => assignPlayerToToken(p);
+      el.onclick = () => assignPlayer(p);
       rosterDiv.appendChild(el);
     });
   }
 
-  function assignPlayerToToken(playerData){
-    if(activeTokenForModal){
+  function assignPlayer(playerData){
+    if(modalMode === 'builder' && activeTokenForModal){
       const img = activeTokenForModal.querySelector('img');
       const nameBox = activeTokenForModal.querySelector('.token-name');
-      
       if(!playerData){
-        img.src = 'image_1ccf02.jpg';
-        nameBox.textContent = 'Jugador';
+        img.src = 'image_1ccf02.jpg'; nameBox.textContent = 'Jugador';
       } else {
-        img.src = playerData.photo;
-        img.onerror = () => img.src = 'image_1ccf02.jpg';
+        img.src = playerData.photo; img.onerror = () => img.src = 'image_1ccf02.jpg';
         nameBox.textContent = playerData.name;
       }
+    } else if (modalMode === 'penalties' && playerData){
+      initPenalties(playerData);
     }
     closeModal();
   }
@@ -580,8 +381,371 @@ const app = (function(){
     activeTokenForModal = null;
   }
 
+  // ==========================================
+  // MODULE 1: HIGHER OR LOWER GAME
+  // ==========================================
+  let statKey = 'goals', pool = [], usedIds = new Set(), leftPlayer = null, rightPlayer = null, scoreHL = 0, roundLockedHL = false;
+  const setupBtns = { goals: document.getElementById('statGoals'), goals2026: document.getElementById('statGoals2026'), assists: document.getElementById('statAssists'), assists2026: document.getElementById('statAssists2026'), wins: document.getElementById('statWins'), losses: document.getElementById('statLosses') };
+  Object.keys(setupBtns).forEach(k => {
+    setupBtns[k].addEventListener('click', () => {
+      statKey = k;
+      Object.values(setupBtns).forEach(b => b.className = '');
+      if(k === 'wins') setupBtns[k].className = 'success-selected'; else if(k === 'losses') setupBtns[k].className = 'danger-selected'; else setupBtns[k].className = 'selected';
+    });
+  });
+  function getStatLabel(){ const dict = { goals: 'GOLES HIST.', goals2026: 'GOLES 2026', assists: 'ASIST. HIST.', assists2026: 'ASIST. 2026', wins: 'VICTORIAS', losses: 'DERROTAS' }; return dict[statKey]; }
+  
+  document.getElementById('startBtn').addEventListener('click', () => {
+    pool = playersData.filter(p => p[statKey] > 0);
+    if(pool.length < 2) return alert('No hay suficientes jugadores con estadísticas.');
+    scoreHL = 0; usedIds = new Set();
+    leftPlayer = pool[Math.floor(Math.random() * pool.length)]; usedIds.add(leftPlayer.id);
+    rightPlayer = pickRightPlayer(leftPlayer.id); usedIds.add(rightPlayer.id);
+    showScreen('game'); renderRoundHL();
+  });
+
+  function pickRightPlayer(exId){
+    let cands = pool.filter(p => p.id !== exId && !usedIds.has(p.id));
+    if(!cands.length) { usedIds = new Set([exId]); cands = pool.filter(p => p.id !== exId); }
+    return cands[Math.floor(Math.random() * cands.length)];
+  }
+
+  function renderRoundHL(){
+    roundLockedHL = false;
+    document.getElementById('leftPanel').className = 'duel-panel left'; document.getElementById('rightPanel').className = 'duel-panel right';
+    const lp = document.getElementById('leftPhoto'); lp.src = leftPlayer.photo; lp.onerror = () => lp.src = 'image_1ccf02.jpg';
+    document.getElementById('leftName').textContent = leftPlayer.name; document.getElementById('leftValue').textContent = leftPlayer[statKey];
+    document.getElementById('leftValue').className = 'player-value'; document.getElementById('leftStatLabel').textContent = getStatLabel();
+    const rp = document.getElementById('rightPhoto'); rp.src = rightPlayer.photo; rp.onerror = () => rp.src = 'image_1ccf02.jpg';
+    document.getElementById('rightName').textContent = rightPlayer.name; document.getElementById('rightValue').textContent = '?';
+    document.getElementById('rightValue').className = 'player-value hidden-value'; document.getElementById('rightStatLabel').textContent = getStatLabel();
+    document.getElementById('promptText').innerHTML = `¿<b>${rightPlayer.name}</b> tiene más o menos ${getStatLabel().toLowerCase()} que <b>${leftPlayer.name}</b>?`;
+    document.getElementById('btnMore').disabled = false; document.getElementById('btnLess').disabled = false;
+    document.getElementById('scorePill').innerHTML = `Racha<br><b>${scoreHL}</b>`;
+  }
+
+  document.getElementById('btnMore').addEventListener('click', () => handleGuessHL('more'));
+  document.getElementById('btnLess').addEventListener('click', () => handleGuessHL('less'));
+
+  function handleGuessHL(choice){
+    if(roundLockedHL) return; roundLockedHL = true;
+    document.getElementById('btnMore').disabled = true; document.getElementById('btnLess').disabled = true;
+    const lv = leftPlayer[statKey], rv = rightPlayer[statKey];
+    const correct = (rv === lv) || (choice === 'more' ? rv > lv : rv < lv);
+    const rvEl = document.getElementById('rightValue'); rvEl.textContent = rv; rvEl.className = 'player-value';
+    document.getElementById('leftPanel').classList.add(correct ? 'flash-correct' : 'flash-wrong');
+    document.getElementById('rightPanel').classList.add(correct ? 'flash-correct' : 'flash-wrong');
+    if(correct){
+      scoreHL++;
+      setTimeout(() => { leftPlayer = rightPlayer; rightPlayer = pickRightPlayer(leftPlayer.id); usedIds.add(rightPlayer.id); renderRoundHL(); }, 850);
+    } else {
+      setTimeout(() => { document.getElementById('finalScore').textContent = scoreHL; showScreen('over'); }, 950);
+    }
+  }
+  document.getElementById('playAgainBtn').addEventListener('click', () => document.getElementById('startBtn').click());
+
+  // ==========================================
+  // MODULE 2: TACTICAL BOARD (LINEUP BUILDER)
+  // ==========================================
+  const pitch = document.getElementById('pitch');
+  const formations = {
+    5: [{x:50, y:88}, {x:25, y:65}, {x:75, y:65}, {x:50, y:40}, {x:50, y:15}],
+    7: [{x:50, y:88}, {x:20, y:70}, {x:50, y:70}, {x:80, y:70}, {x:35, y:45}, {x:65, y:45}, {x:50, y:20}],
+    9: [{x:50, y:88}, {x:20, y:72}, {x:50, y:72}, {x:80, y:72}, {x:20, y:48}, {x:50, y:48}, {x:80, y:48}, {x:35, y:22}, {x:65, y:22}],
+    11: [{x:50, y:88}, {x:15, y:70}, {x:38, y:70}, {x:62, y:70}, {x:85, y:70}, {x:15, y:45}, {x:38, y:45}, {x:62, y:45}, {x:85, y:45}, {x:35, y:20}, {x:65, y:20}]
+  };
+  function initBuilder(){ showScreen('builder'); buildPitch(5); }
+  document.getElementById('formatSelector').addEventListener('click', (e) => {
+    if(e.target.tagName !== 'BUTTON') return;
+    document.querySelectorAll('#formatSelector button').forEach(b => b.classList.remove('active')); e.target.classList.add('active');
+    buildPitch(Number(e.target.dataset.format));
+  });
+  function buildPitch(size){
+    pitch.querySelectorAll('.pitch-token').forEach(t => t.remove());
+    formations[size].forEach((pos, i) => createToken(pos.x, pos.y, i+1));
+  }
+  function createToken(x, y, index){
+    const token = document.createElement('div'); token.className = 'pitch-token'; token.style.left = `${x}%`; token.style.top = `${y}%`;
+    token.innerHTML = `<img src="image_1ccf02.jpg" alt="Icon"><div class="token-name">Jugador</div>`;
+    let startX, startY, hasMoved = false;
+    token.addEventListener('touchstart', dragStart, {passive: false}); token.addEventListener('mousedown', dragStart);
+    function dragStart(e){
+      e.preventDefault(); const pt = e.touches ? e.touches[0] : e;
+      startX = pt.clientX; startY = pt.clientY; hasMoved = false; token.style.zIndex = 50;
+      document.addEventListener('touchmove', dragMove, {passive: false}); document.addEventListener('mousemove', dragMove);
+      document.addEventListener('touchend', dragEnd); document.addEventListener('mouseup', dragEnd);
+    }
+    function dragMove(e){
+      e.preventDefault(); const pt = e.touches ? e.touches[0] : e;
+      if(Math.abs(pt.clientX - startX) > 5 || Math.abs(pt.clientY - startY) > 5) hasMoved = true;
+      if(hasMoved){
+        const rect = pitch.getBoundingClientRect();
+        let newX = Math.max(20, Math.min(pt.clientX - rect.left, rect.width - 20));
+        let newY = Math.max(20, Math.min(pt.clientY - rect.top, rect.height - 20));
+        token.style.left = `${newX}px`; token.style.top = `${newY}px`;
+      }
+    }
+    function dragEnd(e){
+      document.removeEventListener('touchmove', dragMove); document.removeEventListener('mousemove', dragMove);
+      document.removeEventListener('touchend', dragEnd); document.removeEventListener('mouseup', dragEnd);
+      token.style.zIndex = 10;
+      if(!hasMoved){ activeTokenForModal = token; openModal('builder'); }
+    }
+    pitch.appendChild(token);
+  }
+
+  // ==========================================
+  // MODULE 3: PENALTY MINIGAME
+  // ==========================================
+  const canvas = document.getElementById('gameCanvas');
+  const ctx = canvas.getContext('2d');
+  
+  let animId;
+  let penScore = 0, penBest = 0;
+  let gameState = 'ready'; // ready, aiming, shooting, over
+  
+  // Entities
+  let ball = { x: 200, y: 400, vx: 0, vy: 0, r: 12 };
+  let gk = { x: 200, y: 70, w: 50, h: 50, speed: 2, dir: 1, img: new Image() };
+  let striker = { img: new Image(), loaded: false };
+  let goalRect = { x: 100, y: 35, w: 200, h: 10 }; // Linea de gol
+
+  // Load GK Image
+  let pChris = playersData.find(p => p.name === 'Chris');
+  gk.img.src = pChris ? pChris.photo : 'image_1ccf02.jpg';
+  gk.img.onerror = () => gk.img.src = 'image_1ccf02.jpg';
+
+  // Interaction
+  let dragStartPt = {x:0, y:0};
+  let dragCurPt = {x:0, y:0};
+
+  function initPenalties(kickerData){
+    showScreen('penalties');
+    penScore = 0;
+    updatePenScore();
+    
+    striker.loaded = false;
+    striker.img.src = kickerData.photo;
+    striker.img.onload = () => striker.loaded = true;
+    striker.img.onerror = () => { striker.img.src = 'image_1ccf02.jpg'; striker.loaded = true; };
+    
+    resetPenRound();
+    
+    // Attach Canvas events
+    canvas.addEventListener('mousedown', pDragStart);
+    canvas.addEventListener('touchstart', pDragStart, {passive: false});
+    
+    if(animId) cancelAnimationFrame(animId);
+    gameLoop();
+  }
+
+  function stopPenalties(){
+    if(animId) cancelAnimationFrame(animId);
+    showScreen('menu');
+  }
+
+  function resetPenRound(){
+    ball.x = 200; ball.y = 400; ball.vx = 0; ball.vy = 0;
+    gk.x = 200; gk.speed = 2 + (penScore * 0.4); // Aumenta velocidad
+    gameState = 'ready';
+  }
+
+  function updatePenScore(){
+    document.getElementById('penScore').textContent = penScore;
+    document.getElementById('penBest').textContent = penBest;
+  }
+
+  function showPenMsg(type){
+    const msg = document.getElementById('penMsg');
+    msg.className = 'penalty-msg show ' + type;
+    msg.textContent = type === 'goal' ? '¡GOLAZO!' : '¡AFUERA!';
+    if(type === 'miss') msg.textContent = '¡ATAJÓ CHRIS!'; // O falló
+    setTimeout(() => msg.className = 'penalty-msg', 1200);
+  }
+
+  // --- Input ---
+  function getMousePos(e){
+    const rect = canvas.getBoundingClientRect();
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+    // Scale coords to canvas logical size (400x500)
+    return {
+      x: (clientX - rect.left) * (canvas.width / rect.width),
+      y: (clientY - rect.top) * (canvas.height / rect.height)
+    };
+  }
+
+  function pDragStart(e){
+    if(gameState !== 'ready') return;
+    e.preventDefault();
+    const pos = getMousePos(e);
+    // Solo permitir iniciar tiro si toca cerca de la pelota
+    if(Math.hypot(pos.x - ball.x, pos.y - ball.y) < 40){
+      gameState = 'aiming';
+      dragStartPt = {x: ball.x, y: ball.y};
+      dragCurPt = pos;
+      document.addEventListener('mousemove', pDragMove);
+      document.addEventListener('touchmove', pDragMove, {passive: false});
+      document.addEventListener('mouseup', pDragEnd);
+      document.addEventListener('touchend', pDragEnd);
+    }
+  }
+
+  function pDragMove(e){
+    if(gameState !== 'aiming') return;
+    e.preventDefault();
+    dragCurPt = getMousePos(e);
+  }
+
+  function pDragEnd(e){
+    document.removeEventListener('mousemove', pDragMove);
+    document.removeEventListener('touchmove', pDragMove);
+    document.removeEventListener('mouseup', pDragEnd);
+    document.removeEventListener('touchend', pDragEnd);
+    
+    if(gameState === 'aiming'){
+      gameState = 'shooting';
+      // Calcular vector inverso (estilo tirachinas)
+      let dx = dragStartPt.x - dragCurPt.x;
+      let dy = dragStartPt.y - dragCurPt.y;
+      
+      // Limitar la potencia
+      const maxPower = 15;
+      const power = Math.min(Math.hypot(dx, dy) * 0.1, maxPower);
+      const angle = Math.atan2(dy, dx);
+      
+      ball.vx = Math.cos(angle) * power;
+      ball.vy = Math.sin(angle) * power;
+    }
+  }
+
+  // --- Draw Helpers ---
+  function drawCircleImg(img, x, y, r){
+    if(!img.complete || img.naturalWidth === 0) return;
+    ctx.save();
+    ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI*2); ctx.closePath();
+    ctx.clip();
+    ctx.drawImage(img, x-r, y-r, r*2, r*2);
+    ctx.restore();
+    // Borde gold
+    ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI*2);
+    ctx.strokeStyle = '#ffc700'; ctx.lineWidth = 2; ctx.stroke();
+  }
+
+  // --- Loop ---
+  function gameLoop(){
+    animId = requestAnimationFrame(gameLoop);
+    
+    // Clear & Draw Pitch
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    // Área
+    ctx.strokeStyle = 'rgba(255,255,255,0.4)';
+    ctx.lineWidth = 2;
+    ctx.strokeRect(50, 0, 300, 120);
+    // Semicírculo
+    ctx.beginPath(); ctx.arc(200, 120, 50, 0, Math.PI); ctx.stroke();
+    // Punto penal
+    ctx.beginPath(); ctx.arc(200, 380, 4, 0, Math.PI*2); ctx.fillStyle = 'rgba(255,255,255,0.6)'; ctx.fill();
+
+    // Arco
+    ctx.fillStyle = 'rgba(255,255,255,0.2)';
+    ctx.fillRect(goalRect.x, goalRect.y - 30, goalRect.w, 30); // Red
+    ctx.fillStyle = '#fff';
+    ctx.fillRect(goalRect.x - 4, goalRect.y - 30, 4, 30); // Palo izq
+    ctx.fillRect(goalRect.x + goalRect.w, goalRect.y - 30, 4, 30); // Palo der
+    ctx.fillRect(goalRect.x - 4, goalRect.y - 30, goalRect.w + 8, 4); // Travesaño
+
+    // GK Movement
+    gk.x += gk.speed * gk.dir;
+    if(gk.x < goalRect.x + 20) gk.dir = 1;
+    if(gk.x > goalRect.x + goalRect.w - 20) gk.dir = -1;
+    
+    // Draw GK (Chris)
+    drawCircleImg(gk.img, gk.x, gk.y, 25);
+
+    // Draw Striker Profile (if ready)
+    if(gameState === 'ready' || gameState === 'aiming'){
+      if(striker.loaded) drawCircleImg(striker.img, ball.x, ball.y + 45, 20);
+    }
+
+    // Aiming Line
+    if(gameState === 'aiming'){
+      ctx.beginPath();
+      ctx.moveTo(ball.x, ball.y);
+      // Linea predictiva (inversa)
+      ctx.lineTo(ball.x + (dragStartPt.x - dragCurPt.x), ball.y + (dragStartPt.y - dragCurPt.y));
+      ctx.strokeStyle = 'rgba(255, 199, 0, 0.6)';
+      ctx.lineWidth = 4;
+      ctx.setLineDash([5, 5]);
+      ctx.stroke();
+      ctx.setLineDash([]);
+    }
+
+    // Ball Physics
+    if(gameState === 'shooting'){
+      ball.x += ball.vx;
+      ball.y += ball.vy;
+      ball.vx *= 0.985; // Fricción
+      ball.vy *= 0.985;
+      
+      // Stop if very slow
+      if(Math.abs(ball.vx) < 0.2 && Math.abs(ball.vy) < 0.2){
+        gameState = 'over';
+        showPenMsg('miss');
+        penScore = 0; updatePenScore();
+        setTimeout(resetPenRound, 1500);
+      }
+      
+      // Collision Walls
+      if(ball.x < 0 || ball.x > canvas.width || ball.y > canvas.height) {
+        gameState = 'over'; showPenMsg('miss'); penScore = 0; updatePenScore(); setTimeout(resetPenRound, 1500);
+      }
+
+      // Collision GK (Circulo vs Rect aproximado)
+      if(ball.y < gk.y + 25 && ball.y > gk.y - 25 && ball.x > gk.x - 25 && ball.x < gk.x + 25){
+        ball.vy *= -0.5; // Rebote
+        ball.vx *= -0.5;
+        gameState = 'over';
+        showPenMsg('miss');
+        penScore = 0; updatePenScore();
+        setTimeout(resetPenRound, 1500);
+      }
+      
+      // Collision Goal (Cruza la linea de gol sin tocar al GK)
+      if(gameState === 'shooting' && ball.y < goalRect.y){
+        if(ball.x > goalRect.x && ball.x < goalRect.x + goalRect.w){
+          gameState = 'over';
+          penScore++;
+          if(penScore > penBest) penBest = penScore;
+          updatePenScore();
+          showPenMsg('goal');
+          setTimeout(resetPenRound, 1500);
+        } else {
+          // Pegó afuera
+          gameState = 'over';
+          showPenMsg('miss');
+          penScore = 0; updatePenScore();
+          setTimeout(resetPenRound, 1500);
+        }
+      }
+    }
+
+    // Draw Ball
+    ctx.beginPath();
+    ctx.arc(ball.x, ball.y, ball.r, 0, Math.PI*2);
+    ctx.fillStyle = '#ffffff';
+    ctx.fill();
+    ctx.strokeStyle = '#000';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+    // Pelota detalle
+    ctx.fillStyle = '#000';
+    ctx.beginPath(); ctx.arc(ball.x, ball.y, 4, 0, Math.PI*2); ctx.fill();
+  }
+
   // Expose public methods
-  return { showScreen, initBuilder, closeModal };
+  return { showScreen, initBuilder, openModal, closeModal, stopPenalties };
 
 })();
 </script>
