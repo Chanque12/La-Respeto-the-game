@@ -343,9 +343,10 @@
       <h1 class="section-title" style="text-align:center;">Sorteo de Equipos</h1>
       <p class="section-hint" style="text-align:center;">Seleccioná quiénes juegan hoy:</p>
       
-      <div style="display:flex; justify-content:space-between; margin-bottom:12px; align-items:center;">
+      <div style="display:flex; justify-content:space-between; margin-bottom:12px; align-items:center; flex-wrap:wrap; gap:8px;">
         <span style="font-size:14px; color:var(--gold); font-weight:bold;" id="raffleCount">0 Jugadores</span>
-        <div style="display:flex; gap:8px;">
+        <div style="display:flex; gap:6px; flex-wrap:wrap; justify-content:flex-end;">
+          <button type="button" onclick="app.addCustomRafflePlayer()" style="background:var(--panel-alt); border:1px dashed var(--gold); color:var(--gold); border-radius:4px; padding:4px 10px; cursor:pointer; font-weight:bold;">+ Invitado</button>
           <button type="button" onclick="app.toggleAllRaffle(true)" style="background:var(--panel-alt); border:1px solid var(--line); color:var(--cream); border-radius:4px; padding:4px 10px; cursor:pointer;">Todos</button>
           <button type="button" onclick="app.toggleAllRaffle(false)" style="background:var(--panel-alt); border:1px solid var(--line); color:var(--cream); border-radius:4px; padding:4px 10px; cursor:pointer;">Ninguno</button>
         </div>
@@ -427,8 +428,8 @@ const app = (function(){
     { id: 'p32', name: 'Jorgito', photo: 'jorgito.jpg', goals: 0, goals2026: 0, assists: 0, assists2026: 0, wins: 1, losses: 0 }
   ];
 
-  // Lista ordenada alfabéticamente (excluyendo gol en contra)
-  const playableRoster = [...playersData]
+  // Lista jugable base (excluyendo gol en contra). Usamos "let" para poder sumarle invitados en vivo
+  let playableRoster = [...playersData]
       .filter(p => p.name !== 'Gol en contra')
       .sort((a,b) => a.name.localeCompare(b.name));
 
@@ -661,7 +662,7 @@ const app = (function(){
       token.style.zIndex = 10;
       
       if(!hasMoved){
-        // AHORA AMBOS (Rival y Propio) ABREN EL MODAL PARA ELEGIR JUGADORES
+        // Abrir el modal de selección
         activeTokenForModal = token;
         document.getElementById('playerModal').classList.add('active');
       }
@@ -674,12 +675,26 @@ const app = (function(){
     const rosterDiv = document.getElementById('modalRoster');
     rosterDiv.innerHTML = '';
     
+    // Opción Quitar
     const clearEl = document.createElement('div');
     clearEl.className = 'roster-card';
     clearEl.innerHTML = `<div class="clear-icon">✕</div><div class="name">Quitar</div>`;
     clearEl.onclick = () => assignPlayerToToken(null);
     rosterDiv.appendChild(clearEl);
+    
+    // Opción Nuevo / Invitado (Para el Pizarrón)
+    const customEl = document.createElement('div');
+    customEl.className = 'roster-card';
+    customEl.innerHTML = `<div class="clear-icon" style="color:var(--gold); border-color:var(--gold);">+</div><div class="name">Nuevo</div>`;
+    customEl.onclick = () => {
+      let newName = prompt("Ingresá el nombre del jugador invitado:");
+      if(newName) {
+        assignPlayerToToken({ name: newName.substring(0, 12), photo: 'image_1ccf02.jpg' });
+      }
+    };
+    rosterDiv.appendChild(customEl);
 
+    // Jugadores existentes
     playableRoster.forEach(p => {
       const el = document.createElement('div');
       el.className = 'roster-card';
@@ -698,8 +713,6 @@ const app = (function(){
           activeTokenForModal.innerHTML = `<img src="image_1ccf02.jpg" alt="Icon"><div class="token-name">Jugador</div>`;
         }
       } else {
-        // Se reemplaza con la foto del jugador elegido. 
-        // Si es rival, el CSS se encarga de ponerle el borde rojo.
         activeTokenForModal.innerHTML = `<img src="${playerData.photo}" onerror="this.src='image_1ccf02.jpg'" alt="Icon"><div class="token-name">${playerData.name.substring(0,12)}</div>`;
       }
     }
@@ -799,24 +812,61 @@ const app = (function(){
       grid.innerHTML = '';
       
       playableRoster.forEach(p => {
-        const el = document.createElement('div');
-        el.className = 'raffle-card';
-        el.dataset.id = p.id;
-        el.innerHTML = `<img src="${p.photo}" onerror="this.src='image_1ccf02.jpg'"><div class="name">${p.name}</div>`;
-        
-        el.onclick = () => {
-          if(raffleSelection.has(p.id)){
-            raffleSelection.delete(p.id);
-            el.classList.remove('active');
-          } else {
-            raffleSelection.add(p.id);
-            el.classList.add('active');
-          }
-          updateRaffleCount();
-        };
-        grid.appendChild(el);
+        addCardToRaffleGrid(p, grid);
       });
       raffleInitialized = true;
+    }
+  }
+
+  function addCardToRaffleGrid(playerObj, gridElement){
+    const el = document.createElement('div');
+    el.className = 'raffle-card';
+    el.dataset.id = playerObj.id;
+    el.innerHTML = `<img src="${playerObj.photo}" onerror="this.src='image_1ccf02.jpg'"><div class="name">${playerObj.name}</div>`;
+    
+    el.onclick = () => {
+      if(raffleSelection.has(playerObj.id)){
+        raffleSelection.delete(playerObj.id);
+        el.classList.remove('active');
+      } else {
+        raffleSelection.add(playerObj.id);
+        el.classList.add('active');
+      }
+      updateRaffleCount();
+    };
+    gridElement.appendChild(el);
+  }
+
+  // Agregar invitado directamente al Sorteo
+  function addCustomRafflePlayer(){
+    let customName = prompt("Ingresá el nombre del jugador invitado:");
+    if(!customName) return;
+    
+    customName = customName.substring(0, 12);
+    const customPlayer = {
+      id: 'custom_' + Date.now(),
+      name: customName,
+      photo: 'image_1ccf02.jpg',
+      goals: 0, goals2026: 0, assists: 0, assists2026: 0, wins: 0, losses: 0
+    };
+    
+    // Lo guardamos en las listas base para que el pizarrón también lo reconozca si abren el modal
+    playersData.push(customPlayer);
+    playableRoster.push(customPlayer);
+    
+    // Si el modal del pizarrón ya se generó, hay que regenerarlo para que aparezca
+    populateModal(); 
+
+    // Renderizamos la nueva tarjetita en el sorteo y la activamos por defecto
+    const grid = document.getElementById('raffleGrid');
+    addCardToRaffleGrid(customPlayer, grid);
+    
+    // Buscamos la tarjetita recién creada y la forzamos a estar 'active'
+    const newCard = grid.querySelector(`.raffle-card[data-id="${customPlayer.id}"]`);
+    if(newCard){
+      raffleSelection.add(customPlayer.id);
+      newCard.classList.add('active');
+      updateRaffleCount();
     }
   }
 
@@ -847,7 +897,7 @@ const app = (function(){
       return;
     }
 
-    // Mezclar jugadores (Algoritmo Fisher-Yates)
+    // Mezclar jugadores
     let shuffled = [...selectedIds];
     for (let i = shuffled.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
@@ -877,7 +927,7 @@ const app = (function(){
     document.getElementById('raffleResult').style.display = 'block';
   }
 
-  return { showScreen, initBuilder, closeModal, initRaffle, toggleAllRaffle, drawTeams };
+  return { showScreen, initBuilder, closeModal, initRaffle, toggleAllRaffle, drawTeams, addCustomRafflePlayer };
 
 })();
 </script>
