@@ -392,34 +392,34 @@
 <script>
 const app = (function(){
   
-  // ---------- Roster Data ----------
+  // ---------- Roster Data (ACTUALIZADO CON ÚLTIMAS ESTADÍSTICAS) ----------
   const playersData = [
-    { id: 'p1', name: 'Prepu', photo: 'prepu.jpg', goals: 76, goals2026: 32, assists: 20, assists2026: 8, wins: 6, losses: 23 },
+    { id: 'p1', name: 'Prepu', photo: 'prepu.jpg', goals: 81, goals2026: 37, assists: 21, assists2026: 9, wins: 6, losses: 23 },
     { id: 'p2', name: 'Fran', photo: 'fran.jpg', goals: 46, goals2026: 19, assists: 14, assists2026: 4, wins: 18, losses: 8 },
     { id: 'p3', name: 'Fede', photo: 'fede.jpg', goals: 34, goals2026: 18, assists: 31, assists2026: 21, wins: 20, losses: 9 },
     { id: 'p4', name: 'Angel', photo: 'angel.jpg', goals: 58, goals2026: 17, assists: 22, assists2026: 7, wins: 19, losses: 7 },
-    { id: 'p5', name: 'Manu', photo: 'manu.jpg', goals: 11, goals2026: 11, assists: 3, assists2026: 3, wins: 3, losses: 1 },
+    { id: 'p5', name: 'Manu', photo: 'manu.jpg', goals: 14, goals2026: 14, assists: 7, assists2026: 7, wins: 3, losses: 1 },
     { id: 'p6', name: 'SDF', photo: 'sdf.jpg', goals: 14, goals2026: 10, assists: 13, assists2026: 6, wins: 7, losses: 7 },
-    { id: 'p7', name: 'Facu', photo: 'facu.jpg', goals: 32, goals2026: 10, assists: 22, assists2026: 10, wins: 12, losses: 19 },
-    { id: 'p8', name: 'Delirio', photo: 'delirio.jpg', goals: 18, goals2026: 9, assists: 21, assists2026: 14, wins: 12, losses: 12 },
-    { id: 'p9', name: 'Mati Vildosa', photo: 'mati-vildosa.jpg', goals: 15, goals2026: 9, assists: 3, assists2026: 2, wins: 11, losses: 14 },
+    { id: 'p7', name: 'Facu', photo: 'facu.jpg', goals: 32, goals2026: 10, assists: 26, assists2026: 14, wins: 12, losses: 19 },
+    { id: 'p8', name: 'Delirio', photo: 'delirio.jpg', goals: 19, goals2026: 10, assists: 21, assists2026: 14, wins: 12, losses: 12 },
+    { id: 'p9', name: 'Mati Vildosa', photo: 'mati-vildosa.jpg', goals: 17, goals2026: 11, assists: 4, assists2026: 3, wins: 11, losses: 14 },
     { id: 'p10', name: 'Bordon', photo: 'bordon.jpg', goals: 24, goals2026: 9, assists: 14, assists2026: 7, wins: 5, losses: 1 },
     { id: 'p11', name: 'Cuchu', photo: 'cuchu.jpg', goals: 26, goals2026: 8, assists: 12, assists2026: 2, wins: 10, losses: 4 },
     { id: 'p12', name: 'Maxi', photo: 'maxi.jpg', goals: 14, goals2026: 7, assists: 7, assists2026: 5, wins: 8, losses: 13 },
     { id: 'p13', name: 'Nacho', photo: 'nacho.jpg', goals: 15, goals2026: 6, assists: 10, assists2026: 4, wins: 12, losses: 17 },
     { id: 'p14', name: 'Gol en contra', photo: 'image_1ccf02.jpg', goals: 18, goals2026: 4, assists: 0, assists2026: 0, wins: 0, losses: 0 },
-    { id: 'p15', name: 'Mateo', photo: 'mateo.jpg', goals: 4, goals2026: 4, assists: 7, assists2026: 7, wins: 7, losses: 3 },
+    { id: 'p15', name: 'Mateo', photo: 'mateo.jpg', goals: 4, goals2026: 4, assists: 8, assists2026: 8, wins: 7, losses: 3 },
     { id: 'p16', name: 'Mati Vila', photo: 'mati-vila.jpg', goals: 30, goals2026: 3, assists: 31, assists2026: 6, wins: 21, losses: 7 },
     { id: 'p17', name: 'Chris', photo: 'chris.jpg', goals: 9, goals2026: 3, assists: 6, assists2026: 1, wins: 9, losses: 9 },
     { id: 'p18', name: 'Pipi', photo: 'pipi.jpg', goals: 2, goals2026: 2, assists: 0, assists2026: 0, wins: 0, losses: 0 },
-    { id: 'p19', name: 'Agusan', photo: 'agusan.jpg', goals: 2, goals2026: 2, assists: 3, assists2026: 3, wins: 4, losses: 4 },
+    { id: 'p19', name: 'Agusan', photo: 'agusan.jpg', goals: 4, goals2026: 4, assists: 3, assists2026: 3, wins: 4, losses: 4 },
     { id: 'p20', name: 'Lauti', photo: 'lauti.jpg', goals: 2, goals2026: 1, assists: 4, assists2026: 4, wins: 4, losses: 4 },
-    { id: 'p21', name: 'Agus', photo: 'agus.jpg', goals: 1, goals2026: 1, assists: 0, assists2026: 0, wins: 0, losses: 0 },
+    { id: 'p21', name: 'Agus', photo: 'agus.jpg', goals: 3, goals2026: 3, assists: 0, assists2026: 0, wins: 0, losses: 0 },
     { id: 'p22', name: 'Rama', photo: 'rama.jpg', goals: 26, goals2026: 0, assists: 23, assists2026: 0, wins: 13, losses: 4 },
     { id: 'p23', name: 'Andres', photo: 'andres.jpg', goals: 6, goals2026: 0, assists: 1, assists2026: 0, wins: 1, losses: 2 },
     { id: 'p24', name: 'Mago', photo: 'mago.jpg', goals: 3, goals2026: 0, assists: 0, assists2026: 0, wins: 0, losses: 0 },
     { id: 'p25', name: 'Bruno', photo: 'bruno.jpg', goals: 1, goals2026: 0, assists: 0, assists2026: 0, wins: 0, losses: 0 },
-    { id: 'p26', name: 'Nahuel', photo: 'nahuel.jpg', goals: 1, goals2026: 0, assists: 1, assists2026: 0, wins: 0, losses: 0 },
+    { id: 'p26', name: 'Nahuel', photo: 'nahuel.jpg', goals: 3, goals2026: 2, assists: 2, assists2026: 1, wins: 0, losses: 0 },
     { id: 'p27', name: 'Pola', photo: 'pola.jpg', goals: 1, goals2026: 0, assists: 0, assists2026: 0, wins: 1, losses: 2 },
     { id: 'p28', name: 'Ale', photo: 'ale.jpg', goals: 0, goals2026: 0, assists: 1, assists2026: 1, wins: 2, losses: 1 },
     { id: 'p29', name: 'Juli gil', photo: 'juli-gil.jpg', goals: 0, goals2026: 0, assists: 1, assists2026: 1, wins: 0, losses: 0 },
@@ -428,7 +428,6 @@ const app = (function(){
     { id: 'p32', name: 'Jorgito', photo: 'jorgito.jpg', goals: 0, goals2026: 0, assists: 0, assists2026: 0, wins: 1, losses: 0 }
   ];
 
-  // Lista jugable base (excluyendo gol en contra). Usamos "let" para poder sumarle invitados en vivo
   let playableRoster = [...playersData]
       .filter(p => p.name !== 'Gol en contra')
       .sort((a,b) => a.name.localeCompare(b.name));
@@ -662,7 +661,6 @@ const app = (function(){
       token.style.zIndex = 10;
       
       if(!hasMoved){
-        // Abrir el modal de selección
         activeTokenForModal = token;
         document.getElementById('playerModal').classList.add('active');
       }
@@ -837,7 +835,6 @@ const app = (function(){
     gridElement.appendChild(el);
   }
 
-  // Agregar invitado directamente al Sorteo
   function addCustomRafflePlayer(){
     let customName = prompt("Ingresá el nombre del jugador invitado:");
     if(!customName) return;
@@ -850,18 +847,14 @@ const app = (function(){
       goals: 0, goals2026: 0, assists: 0, assists2026: 0, wins: 0, losses: 0
     };
     
-    // Lo guardamos en las listas base para que el pizarrón también lo reconozca si abren el modal
     playersData.push(customPlayer);
     playableRoster.push(customPlayer);
     
-    // Si el modal del pizarrón ya se generó, hay que regenerarlo para que aparezca
     populateModal(); 
 
-    // Renderizamos la nueva tarjetita en el sorteo y la activamos por defecto
     const grid = document.getElementById('raffleGrid');
     addCardToRaffleGrid(customPlayer, grid);
     
-    // Buscamos la tarjetita recién creada y la forzamos a estar 'active'
     const newCard = grid.querySelector(`.raffle-card[data-id="${customPlayer.id}"]`);
     if(newCard){
       raffleSelection.add(customPlayer.id);
@@ -897,26 +890,22 @@ const app = (function(){
       return;
     }
 
-    // Mezclar jugadores
     let shuffled = [...selectedIds];
     for (let i = shuffled.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
     }
 
-    // Dividir en 2 equipos
     const half = Math.ceil(shuffled.length / 2);
     const team1Ids = shuffled.slice(0, half);
     const team2Ids = shuffled.slice(half);
 
-    // Renderizar Equipo 1
     const t1Html = team1Ids.map(id => {
       const p = playersData.find(pl => pl.id === id);
       return `<div class="team-player"><img src="${p.photo}" onerror="this.src='image_1ccf02.jpg'"><span>${p.name}</span></div>`;
     }).join('');
     document.getElementById('team1List').innerHTML = t1Html;
 
-    // Renderizar Equipo 2
     const t2Html = team2Ids.map(id => {
       const p = playersData.find(pl => pl.id === id);
       return `<div class="team-player"><img src="${p.photo}" onerror="this.src='image_1ccf02.jpg'"><span>${p.name}</span></div>`;
