@@ -19,7 +19,6 @@
     --cream-dim: rgba(255, 255, 255, 0.65);
     --danger: #d1554b;
     --danger-dark: #8b0000;
-    --success: #4caf50;
     --pitch: #184d2f;       
     --radius: 6px;
   }
@@ -61,8 +60,8 @@
   main.active{ display:block; }
 
   /* ---- Buttons & Typography ---- */
-  h1.section-title{ font-family:'Teko', sans-serif; font-size: 26px; font-weight:600; text-transform: uppercase; margin: 0 0 4px; text-align:center;}
-  p.section-hint{ color: var(--cream-dim); font-size:14px; margin: 0 0 20px; line-height:1.5; text-align:center;}
+  h1.section-title{ font-family:'Teko', sans-serif; font-size: 26px; font-weight:600; text-transform: uppercase; margin: 0 0 4px; }
+  p.section-hint{ color: var(--cream-dim); font-size:14px; margin: 0 0 20px; line-height:1.5; }
 
   .primary-btn, .secondary-btn{
     width:100%; border-radius: var(--radius); font-family:'Teko', sans-serif;
@@ -76,8 +75,7 @@
 
   /* ---- Main Menu ---- */
   .main-logo { width: 100%; max-width: 200px; margin: 0 auto 24px auto; display: block; border-radius: var(--radius); border: 2px solid var(--gold); box-shadow: 0 0 15px rgba(255, 199, 0, 0.2); }
-  .menu-options { display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-top: 30px; }
-  .menu-options .full-width { grid-column: 1 / -1; }
+  .menu-options { display:flex; flex-direction:column; gap:14px; margin-top: 30px; }
 
   /* ---- Setup screen (Game) ---- */
   .stat-toggle{ display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:24px; }
@@ -89,7 +87,7 @@
   .stat-toggle button:hover { border-color: rgba(255,199,0,0.5); }
   .stat-toggle button.selected{ background: var(--gold); border-color: var(--gold); color: #000; }
   .stat-toggle button.danger-selected{ background: var(--danger); border-color: var(--danger); color: white; }
-  .stat-toggle button.success-selected{ background: var(--success); border-color: var(--success); color: white; }
+  .stat-toggle button.success-selected{ background: #4caf50; border-color: #4caf50; color: white; }
 
   /* ---- Game screen ---- */
   .duel-card{ border: 1px solid var(--line); border-radius: var(--radius); overflow:hidden; background: var(--panel); margin-bottom: 18px; box-shadow: 0 4px 20px rgba(0,0,0,0.5); }
@@ -124,6 +122,7 @@
   .rival-toggle-btn { background: var(--panel); border: 1px solid var(--danger); color: var(--danger); padding: 6px 12px; border-radius: var(--radius); font-family: 'Teko', sans-serif; font-size: 16px; font-weight: 600; text-transform: uppercase; cursor: pointer; transition: 0.2s; }
   .rival-toggle-btn.active { background: var(--danger); color: white; }
 
+  /* Pitches Verticales */
   .board-area { position: relative; width: 100%; margin-bottom: 16px; }
   .pitches-wrapper { display: flex; gap: 10px; width: 100%; }
   
@@ -138,8 +137,10 @@
   .penalty-area-top { position: absolute; top: 0; left: 25%; width: 50%; height: 15%; border: 2px solid rgba(255,255,255,0.4); border-top: none; }
   .penalty-area-bottom { position: absolute; bottom: 0; left: 25%; width: 50%; height: 15%; border: 2px solid rgba(255,255,255,0.4); border-bottom: none; }
   
+  /* Canvas para dibujar */
   #tacticCanvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 20; pointer-events: none; }
 
+  /* Tokens */
   .pitch-token {
     position: absolute; transform: translate(-50%, -50%);
     display: flex; flex-direction: column; align-items: center;
@@ -157,10 +158,12 @@
     border: 1px solid var(--gold);
   }
 
+  /* Tokens Rival */
   .pitch-token.rival-token img, .pitch-token.rival-token .generic-icon { border-color: var(--danger); background: var(--danger-dark); }
   .pitch-token.rival-token .token-name { border-color: var(--danger); }
   .generic-icon { display:flex; align-items:center; justify-content:center; color:white; font-size:18px; font-weight:bold; }
 
+  /* Reducir tamaño de tokens si hay 2 canchas activas */
   .pitches-wrapper.dual .pitch-token { width: 54px; }
   .pitches-wrapper.dual .pitch-token img, .pitches-wrapper.dual .pitch-token .generic-icon { width: 32px; height: 32px; }
   .pitches-wrapper.dual .pitch-token .token-name { font-size: 10px; padding: 1px 4px; }
@@ -178,6 +181,7 @@
   .team-box.team1 { border: 2px solid var(--gold); box-shadow: inset 0 0 20px rgba(255,199,0,0.05); }
   .team-box.team2 { border: 2px solid var(--danger); box-shadow: inset 0 0 20px rgba(209,85,75,0.05); }
   
+  /* Inputs Editables para Nombres de Equipo */
   .team-name-input { 
     display: block; width: 100%; text-align: center; margin: 0 0 12px 0; 
     font-family: 'Teko', sans-serif; font-size: 24px; text-transform: uppercase; 
@@ -192,25 +196,6 @@
   .team-player:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0;}
   .team-player img { width:36px; height:36px; border-radius:50%; object-fit:cover; border:1px solid rgba(255,255,255,0.2);}
   .team-player span { font-size:14px; font-weight:600; color:var(--cream);}
-
-  /* ---- Historial de Partidos (Matches) Screen ---- */
-  .matches-list { display: flex; flex-direction: column; gap: 20px; margin-bottom: 20px; }
-  .match-item { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.4); }
-  .match-header { background: var(--panel-alt); padding: 8px; text-align: center; font-family: 'Teko', sans-serif; font-size: 18px; color: var(--gold); letter-spacing: 0.5px; border-bottom: 1px solid var(--line); }
-  .match-scoreboard { display: flex; }
-  .match-team { flex: 1; padding: 12px; display: flex; flex-direction: column; }
-  .match-team.winner { background: rgba(76, 175, 80, 0.08); }
-  .match-team.loser { background: rgba(209, 85, 75, 0.08); }
-  .match-team-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed var(--line); padding-bottom: 8px; margin-bottom: 10px; }
-  .match-team-name { font-family: 'Teko', sans-serif; font-size: 24px; text-transform: uppercase; color: var(--cream); margin: 0; }
-  .match-score { font-family: 'Teko', sans-serif; font-size: 36px; font-weight: 600; color: var(--gold); line-height: 1; }
-  .match-player { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
-  .match-player img { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; border: 1px solid rgba(255,255,255,0.2); }
-  .match-player-info { display: flex; align-items: center; gap: 6px; flex: 1; }
-  .match-player-name { font-size: 13px; color: var(--cream-dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .goal-badge { background: var(--gold); color: #000; font-family: 'Teko', sans-serif; font-size: 14px; font-weight: 600; padding: 0px 6px; border-radius: 4px; display: flex; align-items: center; gap: 3px; }
-  
-  .match-col-left { border-right: 1px solid var(--line); }
 
   /* ---- Modal Picker ---- */
   .modal-overlay { position: fixed; top:0; left:0; right:0; bottom:0; background: rgba(0,0,0,0.9); z-index: 999; display: flex; flex-direction: column; opacity: 0; pointer-events: none; transition: opacity 0.2s; }
@@ -250,28 +235,31 @@
       <h1 class="section-title">Bienvenido</h1>
       
       <div class="menu-options">
-        <button type="button" class="primary-btn full-width" onclick="app.showScreen('setup')">Jugar: ¿Más o Menos?</button>
-        <button type="button" class="secondary-btn" style="border-color: var(--gold); color: var(--gold); margin:0;" onclick="app.initBuilder()">Pizarrón Táctico</button>
-        <button type="button" class="secondary-btn" style="border-color: var(--cream-dim); margin:0;" onclick="app.initRaffle()">Sorteo Equipos</button>
-        <button type="button" class="secondary-btn full-width" style="border-color: var(--success); color: var(--success); margin:0;" onclick="app.initMatches()">Historial de Partidos</button>
+        <button type="button" class="primary-btn" onclick="app.showScreen('setup')">Jugar: ¿Más o Menos?</button>
+        <button type="button" class="secondary-btn" style="border-color: var(--gold); color: var(--gold);" onclick="app.initBuilder()">Pizarrón Táctico</button>
+        <button type="button" class="secondary-btn" style="border-color: var(--cream-dim);" onclick="app.initRaffle()">Sorteo de Equipos</button>
       </div>
     </div>
   </main>
 
   <!-- SETUP SCREEN (Game) -->
   <main id="screen-setup">
-    <h1 class="section-title">Elegí la categoría</h1>
-    <p class="section-hint">Seleccioná qué estadística querés comparar.</p>
-    <div class="stat-toggle">
-      <button type="button" id="statGoals" class="selected">Goles Hist.</button>
-      <button type="button" id="statGoals2026">Goles 2026</button>
-      <button type="button" id="statAssists">Asist. Hist.</button>
-      <button type="button" id="statAssists2026">Asist. 2026</button>
-      <button type="button" id="statWins">Victorias</button>
-      <button type="button" id="statLosses">Derrotas</button>
+    <div style="text-align: center;">
+      <h1 class="section-title">Elegí la categoría</h1>
+      <p class="section-hint">Seleccioná qué estadística querés comparar.</p>
+
+      <div class="stat-toggle">
+        <button type="button" id="statGoals" class="selected">Goles Hist.</button>
+        <button type="button" id="statGoals2026">Goles 2026</button>
+        <button type="button" id="statAssists">Asist. Hist.</button>
+        <button type="button" id="statAssists2026">Asist. 2026</button>
+        <button type="button" id="statWins">Victorias</button>
+        <button type="button" id="statLosses">Derrotas</button>
+      </div>
+
+      <button type="button" class="primary-btn" id="startBtn">Empezar a Jugar</button>
+      <button type="button" class="secondary-btn" onclick="app.showScreen('menu')">Volver al Menú</button>
     </div>
-    <button type="button" class="primary-btn" id="startBtn">Empezar a Jugar</button>
-    <button type="button" class="secondary-btn" onclick="app.showScreen('menu')">Volver al Menú</button>
   </main>
 
   <!-- GAME SCREEN -->
@@ -313,6 +301,7 @@
 
   <!-- BUILDER SCREEN (Lineup) -->
   <main id="screen-builder">
+    
     <div class="builder-header">
       <div class="format-selector" id="formatSelector">
         <button type="button" data-format="5" class="active">F5</button>
@@ -321,6 +310,7 @@
         <button type="button" data-format="11">F11</button>
       </div>
     </div>
+
     <div class="toolbar">
       <div class="draw-tools">
         <button id="toolMove" class="active" title="Mover">🖐️</button>
@@ -333,11 +323,13 @@
     
     <div class="board-area" id="boardArea">
       <canvas id="tacticCanvas"></canvas>
+      
       <div class="pitches-wrapper" id="pitchesWrapper">
         <div class="pitch-container" id="pitch1">
           <div class="penalty-area-top"></div>
           <div class="penalty-area-bottom"></div>
         </div>
+        
         <div class="pitch-container" id="pitch2" style="display:none;">
           <div class="penalty-area-top"></div>
           <div class="penalty-area-bottom"></div>
@@ -348,14 +340,16 @@
     <p style="text-align:center; font-size:12px; color:var(--cream-dim); margin-top:-6px; margin-bottom: 16px;">
       <b>Toque corto</b>: Asignar jugador &nbsp;|&nbsp; <b>Mover 🖐️</b>: Reposicionar ficha
     </p>
+
     <button type="button" class="secondary-btn" onclick="app.showScreen('menu')">Volver al Menú</button>
   </main>
 
   <!-- RAFFLE SCREEN (Sorteo) -->
   <main id="screen-raffle">
+    <!-- Paso 1: Selección -->
     <div id="raffleSetup">
-      <h1 class="section-title">Sorteo de Equipos</h1>
-      <p class="section-hint">Seleccioná quiénes juegan hoy:</p>
+      <h1 class="section-title" style="text-align:center;">Sorteo de Equipos</h1>
+      <p class="section-hint" style="text-align:center;">Seleccioná quiénes juegan hoy:</p>
       
       <div style="display:flex; justify-content:space-between; margin-bottom:12px; align-items:center; flex-wrap:wrap; gap:8px;">
         <span style="font-size:14px; color:var(--gold); font-weight:bold;" id="raffleCount">0 Jugadores</span>
@@ -372,16 +366,19 @@
       <button type="button" class="secondary-btn" onclick="app.showScreen('menu')">Volver al Menú</button>
     </div>
 
+    <!-- Paso 2: Resultado -->
     <div id="raffleResult" style="display:none;">
-      <h1 class="section-title">Equipos Confirmados</h1>
+      <h1 class="section-title" style="text-align:center; color:var(--gold);">Equipos Confirmados</h1>
       <p style="text-align:center; font-size:12px; color:var(--cream-dim); margin-top:-6px; margin-bottom:16px;">✏️ Tocá el nombre de los equipos para editarlos</p>
 
       <div class="teams-container">
         <div class="team-box team1">
+          <!-- INPUT EDITABLE -->
           <input type="text" class="team-name-input" id="team1NameInput" value="Equipo 1">
           <div id="team1List"></div>
         </div>
         <div class="team-box team2">
+          <!-- INPUT EDITABLE -->
           <input type="text" class="team-name-input" id="team2NameInput" value="Equipo 2">
           <div id="team2List"></div>
         </div>
@@ -390,18 +387,6 @@
       <button type="button" class="primary-btn" style="margin-top:20px;" onclick="app.drawTeams()">Resortear Jugadores</button>
       <button type="button" class="secondary-btn" onclick="document.getElementById('raffleResult').style.display='none'; document.getElementById('raffleSetup').style.display='block';">Volver a Selección</button>
     </div>
-  </main>
-
-  <!-- MATCHES SCREEN (Historial) -->
-  <main id="screen-matches">
-    <h1 class="section-title">Historial de Partidos</h1>
-    <p class="section-hint">Resultados de los últimos picados y goleadores.</p>
-
-    <div class="matches-list" id="matchesList">
-      <!-- Los partidos se renderizan acá por JS -->
-    </div>
-
-    <button type="button" class="secondary-btn" onclick="app.showScreen('menu')">Volver al Menú</button>
   </main>
 
   <!-- PLAYER PICKER MODAL -->
@@ -458,178 +443,8 @@ const app = (function(){
       .filter(p => p.name !== 'Gol en contra')
       .sort((a,b) => a.name.localeCompare(b.name));
 
-  // ---------- Matches Data (Historial) ----------
-  const matchesData = [
-    {
-      date: '7/9',
-      team1: {
-        name: 'Rayo', score: 10,
-        players: [
-          { name: 'Manu', goals: 3, photo: 'manu.jpg' },
-          { name: 'Agus', goals: 2, photo: 'agus.jpg' },
-          { name: 'Mati vildosa', goals: 2, photo: 'mati-vildosa.jpg' },
-          { name: 'Agusan', goals: 2, photo: 'agusan.jpg' },
-          { name: 'Delirio', goals: 1, photo: 'delirio.jpg' },
-          { name: 'Mateo', goals: 0, photo: 'mateo.jpg' }
-        ]
-      },
-      team2: {
-        name: 'McQueen', score: 7,
-        players: [
-          { name: 'Facu', goals: 0, photo: 'facu.jpg' },
-          { name: 'Prepu', goals: 5, photo: 'prepu.jpg' },
-          { name: 'Facu 2', goals: 0, photo: 'image_1ccf02.jpg' },
-          { name: 'Aquiles', goals: 0, photo: 'aquiles.jpg' },
-          { name: 'Nahuel', goals: 2, photo: 'nahuel.jpg' },
-          { name: 'Nacho', goals: 0, photo: 'nacho.jpg' }
-        ]
-      }
-    },
-    {
-      date: '2/8',
-      team1: {
-        name: 'Camarones', score: 5,
-        players: [
-          { name: 'Facu', goals: 0, photo: 'facu.jpg' },
-          { name: 'Chris', goals: 2, photo: 'chris.jpg' },
-          { name: 'Mati vildosa', goals: 1, photo: 'mati-vildosa.jpg' },
-          { name: 'Manu', goals: 1, photo: 'manu.jpg' },
-          { name: 'Delirio', goals: 1, photo: 'delirio.jpg' },
-          { name: 'Nacho', goals: 0, photo: 'nacho.jpg' },
-          { name: 'Maxi', goals: 0, photo: 'maxi.jpg' }
-        ]
-      },
-      team2: {
-        name: 'Elefantes', score: 5,
-        players: [
-          { name: 'Fede', goals: 0, photo: 'fede.jpg' },
-          { name: 'Prepu', goals: 3, photo: 'prepu.jpg' },
-          { name: 'Lauti', goals: 0, photo: 'lauti.jpg' },
-          { name: 'Aquiles', goals: 0, photo: 'aquiles.jpg' },
-          { name: 'Tobi', goals: 0, photo: 'image_1ccf02.jpg' },
-          { name: 'Cuchu', goals: 1, photo: 'cuchu.jpg' },
-          { name: 'Agusan', goals: 1, photo: 'agusan.jpg' }
-        ]
-      }
-    },
-    {
-      date: '26/7',
-      team1: {
-        name: 'Camarones', score: 8,
-        players: [
-          { name: 'Facu', goals: 1, photo: 'facu.jpg' },
-          { name: 'Chris', goals: 0, photo: 'chris.jpg' },
-          { name: 'Mati vila', goals: 0, photo: 'mati-vila.jpg' },
-          { name: 'Manu', goals: 5, photo: 'manu.jpg' },
-          { name: 'Delirio', goals: 0, photo: 'delirio.jpg' },
-          { name: 'Nacho', goals: 1, photo: 'nacho.jpg' },
-          { name: 'Angel', goals: 1, photo: 'angel.jpg' },
-          { name: 'Mati vildosa', goals: 0, photo: 'mati-vildosa.jpg' }
-        ]
-      },
-      team2: {
-        name: 'Elefantes', score: 7,
-        players: [
-          { name: 'Fede', goals: 1, photo: 'fede.jpg' },
-          { name: 'Prepu', goals: 2, photo: 'prepu.jpg' },
-          { name: 'Lauti', goals: 0, photo: 'lauti.jpg' },
-          { name: 'Aquiles', goals: 0, photo: 'aquiles.jpg' },
-          { name: 'Maxi', goals: 1, photo: 'maxi.jpg' },
-          { name: 'Cuchu', goals: 3, photo: 'cuchu.jpg' },
-          { name: 'Agusan', goals: 0, photo: 'agusan.jpg' }
-        ]
-      }
-    },
-    {
-      date: '14/6',
-      team1: {
-        name: 'Equipo 1', score: 3,
-        players: [
-          { name: 'Facu', goals: 1, photo: 'facu.jpg' },
-          { name: 'Maxi', goals: 0, photo: 'maxi.jpg' },
-          { name: 'Prepu', goals: 0, photo: 'prepu.jpg' },
-          { name: 'Ale', goals: 0, photo: 'ale.jpg' },
-          { name: 'Juli gil', goals: 0, photo: 'juli-gil.jpg' },
-          { name: 'Mati vildosa', goals: 0, photo: 'mati-vildosa.jpg' },
-          { name: 'Pipi', goals: 2, photo: 'pipi.jpg' },
-          { name: 'Nacho', goals: 0, photo: 'nacho.jpg' }
-        ]
-      },
-      team2: {
-        name: 'Equipo 2', score: 4,
-        players: [
-          { name: 'Chris', goals: 0, photo: 'chris.jpg' },
-          { name: 'Aquiles', goals: 0, photo: 'aquiles.jpg' },
-          { name: 'Lauti', goals: 0, photo: 'lauti.jpg' },
-          { name: 'Fede', goals: 1, photo: 'fede.jpg' },
-          { name: 'Mati Vila', goals: 0, photo: 'mati-vila.jpg' },
-          { name: 'Angel', goals: 1, photo: 'angel.jpg' },
-          { name: 'SDF', goals: 2, photo: 'sdf.jpg' }
-        ]
-      }
-    },
-    {
-      date: '6/6',
-      team1: {
-        name: 'Sub 100', score: 5,
-        players: [
-          { name: 'Fran', goals: 1, photo: 'fran.jpg' },
-          { name: 'Mateo', goals: 0, photo: 'mateo.jpg' },
-          { name: 'Mati vila', goals: 1, photo: 'mati-vila.jpg' },
-          { name: 'Aquiles', goals: 0, photo: 'aquiles.jpg' },
-          { name: 'Lauti', goals: 0, photo: 'lauti.jpg' },
-          { name: 'Fede', goals: 0, photo: 'fede.jpg' },
-          { name: 'Cuchu', goals: 1, photo: 'cuchu.jpg' },
-          { name: 'Angel', goals: 2, photo: 'angel.jpg' },
-          { name: 'Jorgito', goals: 0, photo: 'jorgito.jpg' }
-        ]
-      },
-      team2: {
-        name: 'Sub 20', score: 2,
-        players: [
-          { name: 'Tobi', goals: 0, photo: 'image_1ccf02.jpg' },
-          { name: 'Maxi', goals: 0, photo: 'maxi.jpg' },
-          { name: 'Prepu', goals: 1, photo: 'prepu.jpg' },
-          { name: 'Facu', goals: 0, photo: 'facu.jpg' },
-          { name: 'Nacho', goals: 0, photo: 'nacho.jpg' },
-          { name: 'Delirio', goals: 0, photo: 'delirio.jpg' },
-          { name: 'Pola', goals: 0, photo: 'pola.jpg' },
-          { name: 'Manu', goals: 1, photo: 'manu.jpg' },
-          { name: 'SDF', goals: 0, photo: 'sdf.jpg' }
-        ]
-      }
-    },
-    {
-      date: '31/5',
-      team1: {
-        name: 'Sub 100', score: 9,
-        players: [
-          { name: 'Fran', goals: 4, photo: 'fran.jpg' },
-          { name: 'Mateo', goals: 0, photo: 'mateo.jpg' },
-          { name: 'Bordon', goals: 2, photo: 'bordon.jpg' },
-          { name: 'Aquiles', goals: 0, photo: 'aquiles.jpg' },
-          { name: 'Lauti', goals: 1, photo: 'lauti.jpg' },
-          { name: 'Fede', goals: 2, photo: 'fede.jpg' },
-          { name: 'SDF', goals: 0, photo: 'sdf.jpg' }
-        ]
-      },
-      team2: {
-        name: 'Sub 20', score: 8,
-        players: [
-          { name: 'Chris', goals: 0, photo: 'chris.jpg' },
-          { name: 'Maxi', goals: 2, photo: 'maxi.jpg' },
-          { name: 'Prepu', goals: 2, photo: 'prepu.jpg' },
-          { name: 'Facu', goals: 0, photo: 'facu.jpg' },
-          { name: 'Nacho', goals: 0, photo: 'nacho.jpg' },
-          { name: 'Delirio', goals: 3, photo: 'delirio.jpg' },
-          { name: 'Agusan', goals: 1, photo: 'agusan.jpg' }
-        ]
-      }
-    }
-  ];
-
   // ---------- Navigation ----------
-  const screens = ['menu', 'setup', 'game', 'over', 'builder', 'raffle', 'matches'];
+  const screens = ['menu', 'setup', 'game', 'over', 'builder', 'raffle'];
   
   function showScreen(name){
     screens.forEach(s => {
@@ -640,7 +455,6 @@ const app = (function(){
     
     if(name === 'menu' || name === 'builder') subtitle.textContent = 'App Oficial';
     else if(name === 'raffle') subtitle.textContent = 'Sorteo';
-    else if(name === 'matches') subtitle.textContent = 'Partidos';
     else subtitle.textContent = '¿Más o Menos?';
     
     if(name === 'builder'){
@@ -800,7 +614,10 @@ const app = (function(){
     pitch2.querySelectorAll('.pitch-token').forEach(t => t.remove());
     
     formationsVertical[size].forEach(pos => createToken(pitch1, pos.x, pos.y, false));
-    if(isRivalActive) formationsVertical[size].forEach(pos => createToken(pitch2, pos.x, pos.y, true));
+    
+    if(isRivalActive){
+      formationsVertical[size].forEach(pos => createToken(pitch2, pos.x, pos.y, true));
+    }
   }
 
   function createToken(targetPitch, x, y, isRival){
@@ -809,8 +626,11 @@ const app = (function(){
     token.style.left = `${x}%`;
     token.style.top = `${y}%`;
     
-    if(isRival) token.innerHTML = `<div class="generic-icon">?</div><div class="token-name">Rival</div>`;
-    else token.innerHTML = `<img src="image_1ccf02.jpg" alt="Icon"><div class="token-name">Jugador</div>`;
+    if(isRival){
+      token.innerHTML = `<div class="generic-icon">?</div><div class="token-name">Rival</div>`;
+    } else {
+      token.innerHTML = `<img src="image_1ccf02.jpg" alt="Icon"><div class="token-name">Jugador</div>`;
+    }
     
     let startX, startY, hasMoved = false;
     token.addEventListener('touchstart', dragStart, {passive: false});
@@ -877,10 +697,13 @@ const app = (function(){
     customEl.innerHTML = `<div class="clear-icon" style="color:var(--gold); border-color:var(--gold);">+</div><div class="name">Nuevo</div>`;
     customEl.onclick = () => {
       let newName = prompt("Ingresá el nombre del jugador invitado:");
-      if(newName) assignPlayerToToken({ name: newName.substring(0, 12), photo: 'image_1ccf02.jpg' });
+      if(newName) {
+        assignPlayerToToken({ name: newName.substring(0, 12), photo: 'image_1ccf02.jpg' });
+      }
     };
     rosterDiv.appendChild(customEl);
 
+    // Jugadores existentes
     playableRoster.forEach(p => {
       const el = document.createElement('div');
       el.className = 'roster-card';
@@ -940,6 +763,7 @@ const app = (function(){
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
   }
+  
   window.addEventListener('resize', initCanvas);
 
   function getPos(e) {
@@ -969,7 +793,9 @@ const app = (function(){
     ctx.stroke();
   }
 
-  function endDraw() { isDrawing = false; }
+  function endDraw() {
+    isDrawing = false;
+  }
 
   cvs.addEventListener('mousedown', startDraw);
   cvs.addEventListener('mousemove', drawMove);
@@ -993,7 +819,10 @@ const app = (function(){
     if(!raffleInitialized){
       const grid = document.getElementById('raffleGrid');
       grid.innerHTML = '';
-      playableRoster.forEach(p => addCardToRaffleGrid(p, grid));
+      
+      playableRoster.forEach(p => {
+        addCardToRaffleGrid(p, grid);
+      });
       raffleInitialized = true;
     }
   }
@@ -1023,12 +852,15 @@ const app = (function(){
     
     customName = customName.substring(0, 12);
     const customPlayer = {
-      id: 'custom_' + Date.now(), name: customName, photo: 'image_1ccf02.jpg',
+      id: 'custom_' + Date.now(),
+      name: customName,
+      photo: 'image_1ccf02.jpg',
       goals: 0, goals2026: 0, assists: 0, assists2026: 0, wins: 0, losses: 0
     };
     
     playersData.push(customPlayer);
     playableRoster.push(customPlayer);
+    
     populateModal(); 
 
     const grid = document.getElementById('raffleGrid');
@@ -1064,7 +896,10 @@ const app = (function(){
 
   function drawTeams(){
     const selectedIds = Array.from(raffleSelection);
-    if(selectedIds.length < 2) return alert("¡Elegí al menos 2 jugadores para poder armar equipos!");
+    if(selectedIds.length < 2) {
+      alert("¡Elegí al menos 2 jugadores para poder armar equipos!");
+      return;
+    }
 
     let shuffled = [...selectedIds];
     for (let i = shuffled.length - 1; i > 0; i--) {
@@ -1076,84 +911,23 @@ const app = (function(){
     const team1Ids = shuffled.slice(0, half);
     const team2Ids = shuffled.slice(half);
 
-    document.getElementById('team1List').innerHTML = team1Ids.map(id => {
+    const t1Html = team1Ids.map(id => {
       const p = playersData.find(pl => pl.id === id);
       return `<div class="team-player"><img src="${p.photo}" onerror="this.src='image_1ccf02.jpg'"><span>${p.name}</span></div>`;
     }).join('');
+    document.getElementById('team1List').innerHTML = t1Html;
 
-    document.getElementById('team2List').innerHTML = team2Ids.map(id => {
+    const t2Html = team2Ids.map(id => {
       const p = playersData.find(pl => pl.id === id);
       return `<div class="team-player"><img src="${p.photo}" onerror="this.src='image_1ccf02.jpg'"><span>${p.name}</span></div>`;
     }).join('');
+    document.getElementById('team2List').innerHTML = t2Html;
 
     document.getElementById('raffleSetup').style.display = 'none';
     document.getElementById('raffleResult').style.display = 'block';
   }
 
-  // ==========================================
-  // MODULE 4: MATCH HISTORY
-  // ==========================================
-  function initMatches(){
-    showScreen('matches');
-    const container = document.getElementById('matchesList');
-    container.innerHTML = '';
-
-    matchesData.forEach(match => {
-      // Determinar ganador para estilos. Empate no agrega clase extra (queda gris/negro).
-      let t1Class = 'match-team match-col-left';
-      let t2Class = 'match-team';
-      if(match.team1.score > match.team2.score){ t1Class += ' winner'; t2Class += ' loser'; }
-      else if(match.team1.score < match.team2.score){ t1Class += ' loser'; t2Class += ' winner'; }
-
-      // Renderiza a los jugadores. Si hicieron goles, muestra la chapita.
-      const renderPlayers = (players) => {
-        return players.map(p => {
-          let goalsBadge = p.goals > 0 ? `<div class="goal-badge">⚽ ${p.goals}</div>` : '';
-          return `
-            <div class="match-player">
-              <img src="${p.photo}" onerror="this.src='image_1ccf02.jpg'">
-              <div class="match-player-info">
-                <span class="match-player-name">${p.name}</span>
-                ${goalsBadge}
-              </div>
-            </div>
-          `;
-        }).join('');
-      };
-
-      const matchHTML = `
-        <div class="match-item">
-          <div class="match-header">FECHA: ${match.date}</div>
-          <div class="match-scoreboard">
-            
-            <div class="${t1Class}">
-              <div class="match-team-header">
-                <h3 class="match-team-name">${match.team1.name}</h3>
-                <div class="match-score">${match.team1.score}</div>
-              </div>
-              <div class="match-roster">
-                ${renderPlayers(match.team1.players)}
-              </div>
-            </div>
-
-            <div class="${t2Class}">
-              <div class="match-team-header">
-                <div class="match-score">${match.team2.score}</div>
-                <h3 class="match-team-name">${match.team2.name}</h3>
-              </div>
-              <div class="match-roster">
-                ${renderPlayers(match.team2.players)}
-              </div>
-            </div>
-
-          </div>
-        </div>
-      `;
-      container.innerHTML += matchHTML;
-    });
-  }
-
-  return { showScreen, initBuilder, closeModal, initRaffle, toggleAllRaffle, drawTeams, addCustomRafflePlayer, initMatches };
+  return { showScreen, initBuilder, closeModal, initRaffle, toggleAllRaffle, drawTeams, addCustomRafflePlayer };
 
 })();
 </script>
