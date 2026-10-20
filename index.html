@@ -157,13 +157,10 @@
     text-align: center; white-space: nowrap; pointer-events: none; z-index: 2;
     border: 1px solid var(--gold);
   }
-
-  /* Tokens Rival */
   .pitch-token.rival-token img, .pitch-token.rival-token .generic-icon { border-color: var(--danger); background: var(--danger-dark); }
   .pitch-token.rival-token .token-name { border-color: var(--danger); }
   .generic-icon { display:flex; align-items:center; justify-content:center; color:white; font-size:18px; font-weight:bold; }
 
-  /* Reducir tamaño de tokens si hay 2 canchas activas */
   .pitches-wrapper.dual .pitch-token { width: 54px; }
   .pitches-wrapper.dual .pitch-token img, .pitches-wrapper.dual .pitch-token .generic-icon { width: 32px; height: 32px; }
   .pitches-wrapper.dual .pitch-token .token-name { font-size: 10px; padding: 1px 4px; }
@@ -181,7 +178,6 @@
   .team-box.team1 { border: 2px solid var(--gold); box-shadow: inset 0 0 20px rgba(255,199,0,0.05); }
   .team-box.team2 { border: 2px solid var(--danger); box-shadow: inset 0 0 20px rgba(209,85,75,0.05); }
   
-  /* Inputs Editables para Nombres de Equipo */
   .team-name-input { 
     display: block; width: 100%; text-align: center; margin: 0 0 12px 0; 
     font-family: 'Teko', sans-serif; font-size: 24px; text-transform: uppercase; 
@@ -196,6 +192,24 @@
   .team-player:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0;}
   .team-player img { width:36px; height:36px; border-radius:50%; object-fit:cover; border:1px solid rgba(255,255,255,0.2);}
   .team-player span { font-size:14px; font-weight:600; color:var(--cream);}
+
+  /* ---- Match Log Screen (Registro de Partidos) ---- */
+  .log-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; background:var(--panel); padding:10px 15px; border-radius:var(--radius); border:1px solid var(--line); }
+  .log-score-display { font-family:'Teko', sans-serif; font-size:46px; color:var(--cream); font-weight:bold; line-height: 1; }
+  .log-columns { display:flex; gap:10px; margin-bottom: 20px; }
+  .log-col { flex:1; background:var(--panel); border-radius:var(--radius); padding:10px; border-top: 4px solid; }
+  .log-col.team1 { border-top-color: var(--gold); }
+  .log-col.team2 { border-top-color: var(--danger); }
+  .log-team-title { font-family: 'Teko', sans-serif; font-size: 22px; text-transform: uppercase; text-align: center; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid var(--line); }
+  .log-col.team1 .log-team-title { color: var(--gold); }
+  .log-col.team2 .log-team-title { color: var(--danger); }
+  .player-log-row { display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--line); padding:10px 0; }
+  .player-log-row:last-child { border-bottom:none; }
+  .player-log-name { font-size:14px; font-weight:bold; color:var(--cream); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 80px;}
+  .goal-controls { display:flex; align-items:center; gap:8px; }
+  .goal-btn { background:var(--panel-alt); border:1px solid var(--line); color:var(--cream); width:28px; height:28px; border-radius:4px; font-weight:bold; cursor:pointer; display:flex; align-items:center; justify-content:center; transition: 0.2s;}
+  .goal-btn:active { background:var(--gold); color:black; border-color: var(--gold); }
+  .goal-count { font-family:'Teko', sans-serif; font-size:24px; width:20px; text-align:center; color:var(--gold); line-height: 1; }
 
   /* ---- Modal Picker ---- */
   .modal-overlay { position: fixed; top:0; left:0; right:0; bottom:0; background: rgba(0,0,0,0.9); z-index: 999; display: flex; flex-direction: column; opacity: 0; pointer-events: none; transition: opacity 0.2s; }
@@ -238,6 +252,7 @@
         <button type="button" class="primary-btn" onclick="app.showScreen('setup')">Jugar: ¿Más o Menos?</button>
         <button type="button" class="secondary-btn" style="border-color: var(--gold); color: var(--gold);" onclick="app.initBuilder()">Pizarrón Táctico</button>
         <button type="button" class="secondary-btn" style="border-color: var(--cream-dim);" onclick="app.initRaffle()">Sorteo de Equipos</button>
+        <button type="button" class="secondary-btn" style="border-color: var(--danger); color: var(--danger);" onclick="app.initLog(true)">Bitácora (Registrar Partido)</button>
       </div>
     </div>
   </main>
@@ -301,7 +316,6 @@
 
   <!-- BUILDER SCREEN (Lineup) -->
   <main id="screen-builder">
-    
     <div class="builder-header">
       <div class="format-selector" id="formatSelector">
         <button type="button" data-format="5" class="active">F5</button>
@@ -323,13 +337,11 @@
     
     <div class="board-area" id="boardArea">
       <canvas id="tacticCanvas"></canvas>
-      
       <div class="pitches-wrapper" id="pitchesWrapper">
         <div class="pitch-container" id="pitch1">
           <div class="penalty-area-top"></div>
           <div class="penalty-area-bottom"></div>
         </div>
-        
         <div class="pitch-container" id="pitch2" style="display:none;">
           <div class="penalty-area-top"></div>
           <div class="penalty-area-bottom"></div>
@@ -373,20 +385,56 @@
 
       <div class="teams-container">
         <div class="team-box team1">
-          <!-- INPUT EDITABLE -->
           <input type="text" class="team-name-input" id="team1NameInput" value="Equipo 1">
           <div id="team1List"></div>
         </div>
         <div class="team-box team2">
-          <!-- INPUT EDITABLE -->
           <input type="text" class="team-name-input" id="team2NameInput" value="Equipo 2">
           <div id="team2List"></div>
         </div>
       </div>
 
-      <button type="button" class="primary-btn" style="margin-top:20px;" onclick="app.drawTeams()">Resortear Jugadores</button>
+      <button type="button" class="primary-btn" style="margin-top:20px; background: var(--danger); color: white;" onclick="app.initLog(false)">📝 Registrar Goles del Partido</button>
+      <button type="button" class="secondary-btn" onclick="app.drawTeams()">Resortear Jugadores</button>
       <button type="button" class="secondary-btn" onclick="document.getElementById('raffleResult').style.display='none'; document.getElementById('raffleSetup').style.display='block';">Volver a Selección</button>
     </div>
+  </main>
+
+  <!-- MATCH LOG SCREEN (Registrar Goles) -->
+  <main id="screen-log">
+    <h1 class="section-title" style="text-align:center;">Bitácora del Partido</h1>
+    <p class="section-hint" style="text-align:center;">Sumá los goles para calcular el resultado final.</p>
+    
+    <div class="log-header">
+      <div id="logTeam1NameDisplay" style="color:var(--gold); font-family:'Teko',sans-serif; font-size:24px; text-transform:uppercase;">Equipo 1</div>
+      <div class="log-score-display"><span id="logScore1">0</span> - <span id="logScore2">0</span></div>
+      <div id="logTeam2NameDisplay" style="color:var(--danger); font-family:'Teko',sans-serif; font-size:24px; text-transform:uppercase;">Equipo 2</div>
+    </div>
+
+    <div class="log-columns">
+      <div class="log-col team1">
+        <div class="log-team-title">Plantel</div>
+        <div id="logTeam1Players"></div>
+      </div>
+      <div class="log-col team2">
+        <div class="log-team-title">Plantel</div>
+        <div id="logTeam2Players"></div>
+      </div>
+    </div>
+
+    <button type="button" class="primary-btn" onclick="app.saveMatch()">Guardar y Calcular Stats</button>
+    <button type="button" class="secondary-btn" onclick="app.showScreen('raffle')">Volver atrás</button>
+  </main>
+
+  <!-- MATCH LOG RESULT (Resumen WhatsApp) -->
+  <main id="screen-log-result">
+    <h1 class="section-title" style="text-align:center; color:var(--gold);">¡Partido Guardado!</h1>
+    <p class="section-hint" style="text-align:center;">Las estadísticas de victorias, derrotas y goles fueron actualizadas.</p>
+    
+    <textarea id="whatsappSummary" readonly style="width:100%; height:260px; background:var(--panel); color:var(--cream); border:1px solid var(--line); border-radius:var(--radius); padding:12px; font-family:monospace; margin-bottom:15px; font-size: 13px;"></textarea>
+    
+    <button type="button" class="primary-btn" onclick="app.copyWhatsApp()">Copiar para WhatsApp</button>
+    <button type="button" class="secondary-btn" onclick="app.showScreen('menu')">Volver al Menú</button>
   </main>
 
   <!-- PLAYER PICKER MODAL -->
@@ -404,7 +452,8 @@
 const app = (function(){
   
   // ---------- Roster Data ----------
-  const playersData = [
+  // Base de datos inicial (Si hay datos guardados en LocalStorage, se sobreescriben más abajo)
+  let playersData = [
     { id: 'p1', name: 'Prepu', photo: 'prepu.jpg', goals: 81, goals2026: 37, assists: 21, assists2026: 9, wins: 6, losses: 23 },
     { id: 'p2', name: 'Fran', photo: 'fran.jpg', goals: 46, goals2026: 19, assists: 14, assists2026: 4, wins: 18, losses: 8 },
     { id: 'p3', name: 'Fede', photo: 'fede.jpg', goals: 34, goals2026: 18, assists: 31, assists2026: 21, wins: 20, losses: 9 },
@@ -439,12 +488,24 @@ const app = (function(){
     { id: 'p32', name: 'Jorgito', photo: 'jorgito.jpg', goals: 0, goals2026: 0, assists: 0, assists2026: 0, wins: 1, losses: 0 }
   ];
 
+  // CARGAR DATOS GUARDADOS (LocalStorage)
+  const savedData = localStorage.getItem('laRespetoPlayers');
+  if(savedData) {
+    try {
+      playersData = JSON.parse(savedData);
+    } catch(e) { console.error("Error cargando datos guardados", e); }
+  }
+
   let playableRoster = [...playersData]
       .filter(p => p.name !== 'Gol en contra')
       .sort((a,b) => a.name.localeCompare(b.name));
 
+  // Almacenamiento temporal de los equipos sorteados
+  let currentTeam1Ids = [];
+  let currentTeam2Ids = [];
+
   // ---------- Navigation ----------
-  const screens = ['menu', 'setup', 'game', 'over', 'builder', 'raffle'];
+  const screens = ['menu', 'setup', 'game', 'over', 'builder', 'raffle', 'log', 'log-result'];
   
   function showScreen(name){
     screens.forEach(s => {
@@ -455,15 +516,14 @@ const app = (function(){
     
     if(name === 'menu' || name === 'builder') subtitle.textContent = 'App Oficial';
     else if(name === 'raffle') subtitle.textContent = 'Sorteo';
+    else if(name === 'log' || name === 'log-result') subtitle.textContent = 'Bitácora';
     else subtitle.textContent = '¿Más o Menos?';
     
-    if(name === 'builder'){
-      setTimeout(initCanvas, 50); 
-    }
+    if(name === 'builder'){ setTimeout(initCanvas, 50); }
   }
 
   // ==========================================
-  // MODULE 1: HIGHER OR LOWER GAME
+  // MODULE 1: HIGHER OR LOWER GAME (Sin cambios)
   // ==========================================
   let statKey = 'goals', pool = [], usedIds = new Set(), leftPlayer = null, rightPlayer = null, score = 0, roundLocked = false;
   const setupBtns = {
@@ -508,7 +568,6 @@ const app = (function(){
     roundLocked = false;
     document.getElementById('leftPanel').className = 'duel-panel left';
     document.getElementById('rightPanel').className = 'duel-panel right';
-
     const lp = document.getElementById('leftPhoto');
     lp.src = leftPlayer.photo; lp.onerror = () => lp.src = 'image_1ccf02.jpg';
     document.getElementById('leftName').textContent = leftPlayer.name;
@@ -561,15 +620,12 @@ const app = (function(){
   document.getElementById('playAgainBtn').addEventListener('click', () => document.getElementById('startBtn').click());
 
   // ==========================================
-  // MODULE 2: TACTICAL BOARD (LINEUP BUILDER)
+  // MODULE 2: TACTICAL BOARD (Sin cambios)
   // ==========================================
   const pitch1 = document.getElementById('pitch1');
   const pitch2 = document.getElementById('pitch2');
   const wrapper = document.getElementById('pitchesWrapper');
-  
-  let activeTokenForModal = null;
-  let currentFormat = 5;
-  let isRivalActive = false;
+  let activeTokenForModal = null, currentFormat = 5, isRivalActive = false;
   
   const formationsVertical = {
     5: [{x:50, y:88}, {x:25, y:65}, {x:75, y:65}, {x:50, y:40}, {x:50, y:15}],
@@ -579,9 +635,7 @@ const app = (function(){
   };
 
   function initBuilder(){
-    showScreen('builder');
-    populateModal();
-    buildPitch(currentFormat);
+    showScreen('builder'); populateModal(); buildPitch(currentFormat);
   }
 
   document.getElementById('formatSelector').addEventListener('click', (e) => {
@@ -596,41 +650,24 @@ const app = (function(){
     isRivalActive = !isRivalActive;
     e.target.classList.toggle('active', isRivalActive);
     e.target.textContent = isRivalActive ? "- Quitar Rival" : "+ Añadir Rival";
-    
-    if(isRivalActive){
-      pitch2.style.display = 'block';
-      wrapper.classList.add('dual');
-    } else {
-      pitch2.style.display = 'none';
-      wrapper.classList.remove('dual');
-    }
-    
-    buildPitch(currentFormat);
-    setTimeout(initCanvas, 10); 
+    if(isRivalActive){ pitch2.style.display = 'block'; wrapper.classList.add('dual'); } 
+    else { pitch2.style.display = 'none'; wrapper.classList.remove('dual'); }
+    buildPitch(currentFormat); setTimeout(initCanvas, 10); 
   });
 
   function buildPitch(size){
     pitch1.querySelectorAll('.pitch-token').forEach(t => t.remove());
     pitch2.querySelectorAll('.pitch-token').forEach(t => t.remove());
-    
     formationsVertical[size].forEach(pos => createToken(pitch1, pos.x, pos.y, false));
-    
-    if(isRivalActive){
-      formationsVertical[size].forEach(pos => createToken(pitch2, pos.x, pos.y, true));
-    }
+    if(isRivalActive) formationsVertical[size].forEach(pos => createToken(pitch2, pos.x, pos.y, true));
   }
 
   function createToken(targetPitch, x, y, isRival){
     const token = document.createElement('div');
     token.className = `pitch-token ${isRival ? 'rival-token' : ''}`;
-    token.style.left = `${x}%`;
-    token.style.top = `${y}%`;
-    
-    if(isRival){
-      token.innerHTML = `<div class="generic-icon">?</div><div class="token-name">Rival</div>`;
-    } else {
-      token.innerHTML = `<img src="image_1ccf02.jpg" alt="Icon"><div class="token-name">Jugador</div>`;
-    }
+    token.style.left = `${x}%`; token.style.top = `${y}%`;
+    if(isRival) token.innerHTML = `<div class="generic-icon">?</div><div class="token-name">Rival</div>`;
+    else token.innerHTML = `<img src="image_1ccf02.jpg" alt="Icon"><div class="token-name">Jugador</div>`;
     
     let startX, startY, hasMoved = false;
     token.addEventListener('touchstart', dragStart, {passive: false});
@@ -642,7 +679,6 @@ const app = (function(){
       const pt = e.touches ? e.touches[0] : e;
       startX = pt.clientX; startY = pt.clientY; hasMoved = false;
       token.style.zIndex = 50;
-      
       document.addEventListener('touchmove', dragMove, {passive: false});
       document.addEventListener('mousemove', dragMove);
       document.addEventListener('touchend', dragEnd);
@@ -655,12 +691,10 @@ const app = (function(){
       if(Math.abs(pt.clientX - startX) > 5 || Math.abs(pt.clientY - startY) > 5) hasMoved = true;
       if(hasMoved){
         const rect = targetPitch.getBoundingClientRect();
-        let newX = pt.clientX - rect.left;
-        let newY = pt.clientY - rect.top;
+        let newX = pt.clientX - rect.left, newY = pt.clientY - rect.top;
         newX = Math.max(15, Math.min(newX, rect.width - 15));
         newY = Math.max(15, Math.min(newY, rect.height - 15));
-        token.style.left = `${newX}px`;
-        token.style.top = `${newY}px`;
+        token.style.left = `${newX}px`; token.style.top = `${newY}px`;
       }
     }
     
@@ -670,40 +704,29 @@ const app = (function(){
       document.removeEventListener('touchend', dragEnd);
       document.removeEventListener('mouseup', dragEnd);
       token.style.zIndex = 10;
-      
-      if(!hasMoved){
-        activeTokenForModal = token;
-        document.getElementById('playerModal').classList.add('active');
-      }
+      if(!hasMoved){ activeTokenForModal = token; document.getElementById('playerModal').classList.add('active'); }
     }
     targetPitch.appendChild(token);
   }
 
-  // --- Modal Logic ---
   function populateModal(){
     const rosterDiv = document.getElementById('modalRoster');
     rosterDiv.innerHTML = '';
-    
-    // Opción Quitar
     const clearEl = document.createElement('div');
     clearEl.className = 'roster-card';
     clearEl.innerHTML = `<div class="clear-icon">✕</div><div class="name">Quitar</div>`;
     clearEl.onclick = () => assignPlayerToToken(null);
     rosterDiv.appendChild(clearEl);
     
-    // Opción Nuevo / Invitado (Para el Pizarrón)
     const customEl = document.createElement('div');
     customEl.className = 'roster-card';
     customEl.innerHTML = `<div class="clear-icon" style="color:var(--gold); border-color:var(--gold);">+</div><div class="name">Nuevo</div>`;
     customEl.onclick = () => {
       let newName = prompt("Ingresá el nombre del jugador invitado:");
-      if(newName) {
-        assignPlayerToToken({ name: newName.substring(0, 12), photo: 'image_1ccf02.jpg' });
-      }
+      if(newName) assignPlayerToToken({ name: newName.substring(0, 12), photo: 'image_1ccf02.jpg' });
     };
     rosterDiv.appendChild(customEl);
 
-    // Jugadores existentes
     playableRoster.forEach(p => {
       const el = document.createElement('div');
       el.className = 'roster-card';
@@ -716,11 +739,8 @@ const app = (function(){
   function assignPlayerToToken(playerData){
     if(activeTokenForModal){
       if(!playerData){
-        if(activeTokenForModal.classList.contains('rival-token')){
-          activeTokenForModal.innerHTML = `<div class="generic-icon">?</div><div class="token-name">Rival</div>`;
-        } else {
-          activeTokenForModal.innerHTML = `<img src="image_1ccf02.jpg" alt="Icon"><div class="token-name">Jugador</div>`;
-        }
+        if(activeTokenForModal.classList.contains('rival-token')) activeTokenForModal.innerHTML = `<div class="generic-icon">?</div><div class="token-name">Rival</div>`;
+        else activeTokenForModal.innerHTML = `<img src="image_1ccf02.jpg" alt="Icon"><div class="token-name">Jugador</div>`;
       } else {
         activeTokenForModal.innerHTML = `<img src="${playerData.photo}" onerror="this.src='image_1ccf02.jpg'" alt="Icon"><div class="token-name">${playerData.name.substring(0,12)}</div>`;
       }
@@ -728,81 +748,45 @@ const app = (function(){
     closeModal();
   }
 
-  function closeModal(){
-    document.getElementById('playerModal').classList.remove('active');
-    activeTokenForModal = null;
-  }
+  function closeModal(){ document.getElementById('playerModal').classList.remove('active'); activeTokenForModal = null; }
 
-  // --- Canvas (Drawing) Logic ---
-  const boardArea = document.getElementById('boardArea');
-  const cvs = document.getElementById('tacticCanvas');
-  const ctx = cvs.getContext('2d');
-  let isDrawing = false;
-  let currentTool = 'move'; 
-
-  const btnMove = document.getElementById('toolMove');
-  const btnDraw = document.getElementById('toolDraw');
-  const btnErase = document.getElementById('toolErase');
-  const btnClear = document.getElementById('toolClear');
+  const boardArea = document.getElementById('boardArea'), cvs = document.getElementById('tacticCanvas'), ctx = cvs.getContext('2d');
+  let isDrawing = false, currentTool = 'move'; 
+  const btnMove = document.getElementById('toolMove'), btnDraw = document.getElementById('toolDraw'), btnErase = document.getElementById('toolErase'), btnClear = document.getElementById('toolClear');
 
   function updateTool(tool, btnElement) {
-    currentTool = tool;
-    [btnMove, btnDraw, btnErase].forEach(b => b.classList.remove('active'));
-    btnElement.classList.add('active');
-    cvs.style.pointerEvents = (tool === 'move') ? 'none' : 'auto';
+    currentTool = tool; [btnMove, btnDraw, btnErase].forEach(b => b.classList.remove('active'));
+    btnElement.classList.add('active'); cvs.style.pointerEvents = (tool === 'move') ? 'none' : 'auto';
   }
 
-  btnMove.onclick = () => updateTool('move', btnMove);
-  btnDraw.onclick = () => updateTool('draw', btnDraw);
-  btnErase.onclick = () => updateTool('erase', btnErase);
-  btnClear.onclick = () => { ctx.clearRect(0, 0, cvs.width, cvs.height); }
+  btnMove.onclick = () => updateTool('move', btnMove); btnDraw.onclick = () => updateTool('draw', btnDraw);
+  btnErase.onclick = () => updateTool('erase', btnErase); btnClear.onclick = () => { ctx.clearRect(0, 0, cvs.width, cvs.height); }
 
-  function initCanvas() {
-    cvs.width = boardArea.clientWidth;
-    cvs.height = boardArea.clientHeight;
-    ctx.lineCap = 'round';
-    ctx.lineJoin = 'round';
-  }
-  
+  function initCanvas() { cvs.width = boardArea.clientWidth; cvs.height = boardArea.clientHeight; ctx.lineCap = 'round'; ctx.lineJoin = 'round'; }
   window.addEventListener('resize', initCanvas);
 
   function getPos(e) {
-    const rect = cvs.getBoundingClientRect();
-    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+    const rect = cvs.getBoundingClientRect(), clientX = e.touches ? e.touches[0].clientX : e.clientX, clientY = e.touches ? e.touches[0].clientY : e.clientY;
     return { x: clientX - rect.left, y: clientY - rect.top };
   }
 
   function startDraw(e) {
     if(currentTool === 'move') return;
-    e.preventDefault();
-    isDrawing = true;
-    const pos = getPos(e);
+    e.preventDefault(); isDrawing = true; const pos = getPos(e);
     ctx.globalCompositeOperation = currentTool === 'erase' ? 'destination-out' : 'source-over';
     ctx.strokeStyle = currentTool === 'erase' ? 'rgba(0,0,0,1)' : '#ffc700';
     ctx.lineWidth = currentTool === 'erase' ? 25 : 4;
-    ctx.beginPath();
-    ctx.moveTo(pos.x, pos.y);
+    ctx.beginPath(); ctx.moveTo(pos.x, pos.y);
   }
 
   function drawMove(e) {
     if(!isDrawing || currentTool === 'move') return;
-    e.preventDefault();
-    const pos = getPos(e);
-    ctx.lineTo(pos.x, pos.y);
-    ctx.stroke();
+    e.preventDefault(); const pos = getPos(e); ctx.lineTo(pos.x, pos.y); ctx.stroke();
   }
+  function endDraw() { isDrawing = false; }
 
-  function endDraw() {
-    isDrawing = false;
-  }
-
-  cvs.addEventListener('mousedown', startDraw);
-  cvs.addEventListener('mousemove', drawMove);
-  window.addEventListener('mouseup', endDraw);
-  cvs.addEventListener('touchstart', startDraw, {passive:false});
-  cvs.addEventListener('touchmove', drawMove, {passive:false});
-  window.addEventListener('touchend', endDraw);
+  cvs.addEventListener('mousedown', startDraw); cvs.addEventListener('mousemove', drawMove); window.addEventListener('mouseup', endDraw);
+  cvs.addEventListener('touchstart', startDraw, {passive:false}); cvs.addEventListener('touchmove', drawMove, {passive:false}); window.addEventListener('touchend', endDraw);
 
 
   // ==========================================
@@ -819,10 +803,7 @@ const app = (function(){
     if(!raffleInitialized){
       const grid = document.getElementById('raffleGrid');
       grid.innerHTML = '';
-      
-      playableRoster.forEach(p => {
-        addCardToRaffleGrid(p, grid);
-      });
+      playableRoster.forEach(p => addCardToRaffleGrid(p, grid));
       raffleInitialized = true;
     }
   }
@@ -832,15 +813,9 @@ const app = (function(){
     el.className = 'raffle-card';
     el.dataset.id = playerObj.id;
     el.innerHTML = `<img src="${playerObj.photo}" onerror="this.src='image_1ccf02.jpg'"><div class="name">${playerObj.name}</div>`;
-    
     el.onclick = () => {
-      if(raffleSelection.has(playerObj.id)){
-        raffleSelection.delete(playerObj.id);
-        el.classList.remove('active');
-      } else {
-        raffleSelection.add(playerObj.id);
-        el.classList.add('active');
-      }
+      if(raffleSelection.has(playerObj.id)){ raffleSelection.delete(playerObj.id); el.classList.remove('active'); } 
+      else { raffleSelection.add(playerObj.id); el.classList.add('active'); }
       updateRaffleCount();
     };
     gridElement.appendChild(el);
@@ -849,42 +824,25 @@ const app = (function(){
   function addCustomRafflePlayer(){
     let customName = prompt("Ingresá el nombre del jugador invitado:");
     if(!customName) return;
-    
     customName = customName.substring(0, 12);
     const customPlayer = {
-      id: 'custom_' + Date.now(),
-      name: customName,
-      photo: 'image_1ccf02.jpg',
+      id: 'custom_' + Date.now(), name: customName, photo: 'image_1ccf02.jpg',
       goals: 0, goals2026: 0, assists: 0, assists2026: 0, wins: 0, losses: 0
     };
-    
-    playersData.push(customPlayer);
-    playableRoster.push(customPlayer);
-    
+    playersData.push(customPlayer); playableRoster.push(customPlayer);
     populateModal(); 
-
     const grid = document.getElementById('raffleGrid');
     addCardToRaffleGrid(customPlayer, grid);
-    
     const newCard = grid.querySelector(`.raffle-card[data-id="${customPlayer.id}"]`);
-    if(newCard){
-      raffleSelection.add(customPlayer.id);
-      newCard.classList.add('active');
-      updateRaffleCount();
-    }
+    if(newCard){ raffleSelection.add(customPlayer.id); newCard.classList.add('active'); updateRaffleCount(); }
   }
 
   function toggleAllRaffle(selectAll){
     const cards = document.querySelectorAll('.raffle-card');
     cards.forEach(card => {
       const id = card.dataset.id;
-      if(selectAll){
-        raffleSelection.add(id);
-        card.classList.add('active');
-      } else {
-        raffleSelection.delete(id);
-        card.classList.remove('active');
-      }
+      if(selectAll){ raffleSelection.add(id); card.classList.add('active'); } 
+      else { raffleSelection.delete(id); card.classList.remove('active'); }
     });
     updateRaffleCount();
   }
@@ -896,10 +854,7 @@ const app = (function(){
 
   function drawTeams(){
     const selectedIds = Array.from(raffleSelection);
-    if(selectedIds.length < 2) {
-      alert("¡Elegí al menos 2 jugadores para poder armar equipos!");
-      return;
-    }
+    if(selectedIds.length < 2) return alert("¡Elegí al menos 2 jugadores para poder armar equipos!");
 
     let shuffled = [...selectedIds];
     for (let i = shuffled.length - 1; i > 0; i--) {
@@ -908,16 +863,16 @@ const app = (function(){
     }
 
     const half = Math.ceil(shuffled.length / 2);
-    const team1Ids = shuffled.slice(0, half);
-    const team2Ids = shuffled.slice(half);
+    currentTeam1Ids = shuffled.slice(0, half);
+    currentTeam2Ids = shuffled.slice(half);
 
-    const t1Html = team1Ids.map(id => {
+    const t1Html = currentTeam1Ids.map(id => {
       const p = playersData.find(pl => pl.id === id);
       return `<div class="team-player"><img src="${p.photo}" onerror="this.src='image_1ccf02.jpg'"><span>${p.name}</span></div>`;
     }).join('');
     document.getElementById('team1List').innerHTML = t1Html;
 
-    const t2Html = team2Ids.map(id => {
+    const t2Html = currentTeam2Ids.map(id => {
       const p = playersData.find(pl => pl.id === id);
       return `<div class="team-player"><img src="${p.photo}" onerror="this.src='image_1ccf02.jpg'"><span>${p.name}</span></div>`;
     }).join('');
@@ -927,7 +882,142 @@ const app = (function(){
     document.getElementById('raffleResult').style.display = 'block';
   }
 
-  return { showScreen, initBuilder, closeModal, initRaffle, toggleAllRaffle, drawTeams, addCustomRafflePlayer };
+
+  // ==========================================
+  // MODULE 4: MATCH LOG & STATS (NUEVO)
+  // ==========================================
+  let matchData = { team1: [], team2: [], score1: 0, score2: 0 };
+
+  function initLog(fromMenu) {
+    if (fromMenu && (currentTeam1Ids.length === 0 || currentTeam2Ids.length === 0)) {
+        alert("Para registrar un partido primero tenés que armar los equipos en la sección de Sorteo.");
+        initRaffle();
+        return;
+    }
+    
+    // Preparar estructura de datos
+    matchData.team1 = currentTeam1Ids.map(id => ({ id: id, goals: 0 }));
+    matchData.team2 = currentTeam2Ids.map(id => ({ id: id, goals: 0 }));
+    matchData.score1 = 0;
+    matchData.score2 = 0;
+    
+    // Nombres de equipos
+    const name1 = document.getElementById('team1NameInput').value || "Equipo 1";
+    const name2 = document.getElementById('team2NameInput').value || "Equipo 2";
+    document.getElementById('logTeam1NameDisplay').textContent = name1;
+    document.getElementById('logTeam2NameDisplay').textContent = name2;
+    
+    renderLogPlayers();
+    updateLogScore();
+    showScreen('log');
+  }
+
+  function renderLogPlayers() {
+    const t1Div = document.getElementById('logTeam1Players');
+    const t2Div = document.getElementById('logTeam2Players');
+    t1Div.innerHTML = matchData.team1.map((p, i) => buildLogRow(p, 1, i)).join('');
+    t2Div.innerHTML = matchData.team2.map((p, i) => buildLogRow(p, 2, i)).join('');
+  }
+
+  function buildLogRow(playerMatchData, teamNum, index) {
+    const pInfo = playersData.find(p => p.id === playerMatchData.id);
+    return `
+    <div class="player-log-row">
+        <div class="player-log-name">${pInfo.name}</div>
+        <div class="goal-controls">
+            <button type="button" class="goal-btn" onclick="app.changeGoals(${teamNum}, ${index}, -1)">-</button>
+            <div class="goal-count">${playerMatchData.goals}</div>
+            <button type="button" class="goal-btn" onclick="app.changeGoals(${teamNum}, ${index}, 1)">+</button>
+        </div>
+    </div>`;
+  }
+
+  function changeGoals(teamNum, index, delta) {
+    const teamArray = teamNum === 1 ? matchData.team1 : matchData.team2;
+    let newGoals = teamArray[index].goals + delta;
+    if (newGoals < 0) newGoals = 0;
+    teamArray[index].goals = newGoals;
+    
+    matchData.score1 = matchData.team1.reduce((sum, p) => sum + p.goals, 0);
+    matchData.score2 = matchData.team2.reduce((sum, p) => sum + p.goals, 0);
+    
+    renderLogPlayers();
+    updateLogScore();
+  }
+
+  function updateLogScore() {
+    document.getElementById('logScore1').textContent = matchData.score1;
+    document.getElementById('logScore2').textContent = matchData.score2;
+  }
+  
+  function saveMatch() {
+    if(!confirm("¿Seguro que querés guardar este resultado? Las estadísticas de los jugadores se van a actualizar.")) return;
+
+    const t1Name = document.getElementById('logTeam1NameDisplay').textContent;
+    const t2Name = document.getElementById('logTeam2NameDisplay').textContent;
+    
+    let t1Result = matchData.score1 > matchData.score2 ? 'win' : (matchData.score1 < matchData.score2 ? 'loss' : 'draw');
+    let t2Result = matchData.score2 > matchData.score1 ? 'win' : (matchData.score2 < matchData.score1 ? 'loss' : 'draw');
+
+    // Actualizar Estadísticas en Memoria
+    matchData.team1.forEach(p => {
+        let player = playersData.find(pl => pl.id === p.id);
+        if (t1Result === 'win') player.wins++;
+        if (t1Result === 'loss') player.losses++;
+        player.goals += p.goals;
+        player.goals2026 += p.goals;
+    });
+    
+    matchData.team2.forEach(p => {
+        let player = playersData.find(pl => pl.id === p.id);
+        if (t2Result === 'win') player.wins++;
+        if (t2Result === 'loss') player.losses++;
+        player.goals += p.goals;
+        player.goals2026 += p.goals;
+    });
+
+    // Guardar en LocalStorage para no perder los datos al recargar
+    try {
+      localStorage.setItem('laRespetoPlayers', JSON.stringify(playersData));
+    } catch(e) { console.error("No se pudo guardar en LocalStorage", e); }
+
+    // Generar Texto para WhatsApp
+    let date = new Date();
+    let dateStr = date.getDate() + '/' + (date.getMonth() + 1);
+    
+    let text = `🗓️ *FECHA:* ${dateStr}\n\n`;
+    
+    // --- Equipo 1 ---
+    text += `🏆 *${t1Name} [ ${matchData.score1} ]*\n`;
+    let t1Scorers = matchData.team1.filter(p => p.goals > 0).map(p => `${playersData.find(pl => pl.id === p.id).name} (${p.goals})`).join(', ');
+    if (t1Scorers) text += `⚽ Goles: ${t1Scorers}.\n`;
+    let t1Roster = matchData.team1.filter(p => p.goals === 0).map(p => playersData.find(pl => pl.id === p.id).name).join(', ');
+    if (t1Roster) text += `👥 Plantel: ${t1Roster}.\n`;
+    
+    // --- Equipo 2 ---
+    text += `\n🔴 *${t2Name} [ ${matchData.score2} ]*\n`;
+    let t2Scorers = matchData.team2.filter(p => p.goals > 0).map(p => `${playersData.find(pl => pl.id === p.id).name} (${p.goals})`).join(', ');
+    if (t2Scorers) text += `⚽ Goles: ${t2Scorers}.\n`;
+    let t2Roster = matchData.team2.filter(p => p.goals === 0).map(p => playersData.find(pl => pl.id === p.id).name).join(', ');
+    if (t2Roster) text += `👥 Plantel: ${t2Roster}.\n`;
+
+    document.getElementById('whatsappSummary').value = text;
+    showScreen('log-result');
+  }
+
+  function copyWhatsApp() {
+    const text = document.getElementById('whatsappSummary').value;
+    navigator.clipboard.writeText(text).then(() => {
+        alert("¡Resumen copiado al portapapeles!");
+    }).catch(err => {
+        alert("Error al copiar. Podés seleccionar el texto manualmente.");
+    });
+  }
+
+  return { 
+    showScreen, initBuilder, closeModal, initRaffle, toggleAllRaffle, 
+    drawTeams, addCustomRafflePlayer, initLog, changeGoals, saveMatch, copyWhatsApp 
+  };
 
 })();
 </script>
